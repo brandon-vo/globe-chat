@@ -7,9 +7,11 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Globe_icon-white.svg/1200px-Globe_icon-white.svg.png" width="50" height="50">
 </p>
 
+---
+
 Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
 
-It is built with Javascript using React and Firebase as a database.
+Built with Javascript using React and Firebase as a database. Styled with Tailwind CSS.
 
 # Images 📷
 TODO
