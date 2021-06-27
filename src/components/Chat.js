@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
-const Channel = ({ user = null, db = null }) => {
+import { UploadIcon, SubmitIcon } from './Icon';
+
+const Chat = ({ user = null, db = null }) => {
 
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessages] = useState('');
@@ -29,7 +31,6 @@ const Channel = ({ user = null, db = null }) => {
                     }));
                     setMessages(data);
                 })
-
             return unsubscribe;
         }
     }, [db]);
@@ -79,17 +80,15 @@ const Channel = ({ user = null, db = null }) => {
                         />
                         <button type="button"
                             onClick={upload}
-                            className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:outline-none">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                            </svg>
+                            className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:outline-none">
+                            <UploadIcon />
                         </button>
                         <button type="submit"
                             disabled={!newMessage}
-                            className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
+                            className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px">
+                            <SubmitIcon />
                         </button>
                     </form>
                 </div>
@@ -105,4 +104,4 @@ const Channel = ({ user = null, db = null }) => {
     );
 };
 
-export default Channel;
+export default Chat;

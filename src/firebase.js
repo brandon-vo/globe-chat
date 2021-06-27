@@ -3,6 +3,7 @@ import "firebase/firestore";
 import "firebase/auth";
 require('dotenv').config();
 
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 let app
 
+// Check if Firebase app is already initialized
 if (firebase.apps.length === 0) {
   app = firebase.initializeApp(firebaseConfig)
 } else {

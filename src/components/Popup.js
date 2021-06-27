@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useSpring, animated } from 'react-spring';
+import { CloseIcon } from './Icon.js';
 
 function About(props) {
 
@@ -10,7 +11,7 @@ function About(props) {
         config: {
             duration: 250
         },
-        opacity: props.trigger ? 1 : 0,
+        opacity: props.trigger ? 1 : 0
     })
 
     // Exiting popup menu by clicking out of region or pressing escape key
@@ -35,15 +36,28 @@ function About(props) {
             <div className="fixed top-0 left-0 w-full h-screen flex justify-center items-center bg-black bg-opacity-50" ref={popupRef} onClick={closePopUp}>
                 <div className="p-6 relative text-black bg-white dark:text-white dark:bg-gray-700 max-w-xl rounded-2xl">
                     <button className="absolute top-5 right-5" onClick={() => props.setTrigger(false)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
+                        <CloseIcon />
                     </button>
                     {props.children}
                 </div>
             </div>
         </animated.div>
-    ) : "";
+    ) : null;
 }
 
-export default About
+function AboutInfo() {
+    return (
+        <div>
+            <h3 className="font-bold">About</h3>
+            <p> Globe Chat is a real-time web app used to chat with anybody around the world.
+                Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
+            </p><br />
+            <p>
+                Built with Javascript using React and Firebase as a database.
+            </p><br />
+            <p>Created by Brandon Vo</p>
+        </div>
+    )
+}
+
+export { About, AboutInfo };
