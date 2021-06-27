@@ -1,17 +1,17 @@
 import React from 'react';
 import { formatRelative } from 'date-fns';
 
-// Date formatting
+// Date formatting using the date-fns library
 const formatDate = date => {
     let formattedDate = '';
     if (date) {
-        formattedDate = formatRelative(date, new Date());
-        formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
+        formattedDate = formatRelative(date, new Date()); // New formatted date
+        formattedDate = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1); // Capitalize first character
     }
     return formattedDate;
 };
 
-// Message
+// Message Format
 const Message = ({
     createdAt = '',
     text = '',
