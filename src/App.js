@@ -47,7 +47,7 @@ function App() {
   }
 
   return (
-    <div className="max-w-screen-7xl mx-auto dark:bg-gray-700">
+    <div className="max-w-screen-7xl mx-auto min-h-screen dark:bg-gray-700">
       {user ? (
         null
       ) : <>
@@ -79,6 +79,9 @@ function App() {
               <div className="flex items-center space-x-3">
                 <button onClick={() => setShowAboutPopup(prev => !prev)}>
                   <AboutIcon />
+                </button>
+                <button onClick={() => alert('Toggling dark mode is currently not implemented')}>
+                  <DarkModeIcon />
                 </button>
                 <button onClick={signInWithGoogle}>
                   <SignInIcon />
