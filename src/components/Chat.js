@@ -41,9 +41,11 @@ const Chat = ({ user = null, db = null }) => {
 
     const handleOnSubmit = e => {
         // Check if message contains over 2000 characters
-        if (newMessage.length > 2000) {
-            return alert('You cannot send a message that is longer than 2000 characters')
-        }
+        if (newMessage.length > 2000) return alert('You cannot send a message that is longer than 2000 characters')
+
+        // Check if message is empty
+        if (!newMessage.trim().length) return 
+
         e.preventDefault();
 
         // Adding to messages collection
