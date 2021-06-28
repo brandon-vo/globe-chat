@@ -9,6 +9,7 @@ import { ParticleBackground, DarkParticleBackground } from './components/Particl
 function App() {
   const [user, setUser] = useState(() => auth.currentUser);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
 
   // Setting user when signing in or out
   useEffect(() => {
@@ -47,97 +48,99 @@ function App() {
   }
 
   return (
-    <div className="max-w-screen-7xl mx-auto min-h-screen dark:bg-gray-700">
-      {user ? (
-        null
-      ) : <>
-        <ParticleBackground />
-        <DarkParticleBackground />
-      </>
-      }
-      <nav className="fixed left-0 right-0">
-        <div className="bg-gray-100 dark:bg-gray-800 px-8 py-5 flex justify-between">
-          <Logo />
-          {user ? (
-            // Navigation bar for users signed in
-            <>
-              <div className="flex items-center space-x-3">
-                <button onClick={() => setShowAboutPopup(prev => !prev)}>
-                  <AboutIcon />
-                </button>
-                <button onClick={() => alert('Toggling dark mode is currently not implemented')}>
-                  <DarkModeIcon />
-                </button>
-                <button onClick={signOut}>
-                  <SignOutIcon />
-                </button>
-              </div>
-            </>
-          ) : (
-            // Navigation bar for users not signed in
-            <>
-              <div className="flex items-center space-x-3">
-                <button onClick={() => setShowAboutPopup(prev => !prev)}>
-                  <AboutIcon />
-                </button>
-                <button onClick={() => alert('Toggling dark mode is currently not implemented')}>
-                  <DarkModeIcon />
-                </button>
-                <button onClick={signInWithGoogle}>
-                  <SignInIcon />
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </nav>
-      {user ? (
-        // User signed in (Main chat)
-        <>
-          <p className='pt-28 pb-2 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
-            globe chat
-          </p>
-          <p className=' pb-1 font-normal font-body text-base tracking-widest text-gray-600 dark:text-gray-200 text-center lowercase'>
-            welcome {user.displayName}
-          </p>
-          <p className="border-b border-gray-200 dark:border-gray-600 py-4 mb-4" />
-          <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
-            <AboutInfo />
-          </About>
-          <Chat user={user} db={db} />
+    <div className={`${darkMode ? 'dark' : ''}`}>
+      <div className="max-w-screen-7xl mx-auto min-h-screen dark:bg-gray-700">
+        {user ? (
+          null
+        ) : <>
+          <ParticleBackground />
+          <DarkParticleBackground />
         </>
-      ) : (
-        // User not signed in (Home screen)
-        <>
-          <div>
-            <p className='pt-52 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
+        }
+        <nav className="fixed left-0 right-0">
+          <div className="bg-gray-100 dark:bg-gray-800 px-8 py-5 flex justify-between">
+            <Logo />
+            {user ? (
+              // Navigation bar for users signed in
+              <>
+                <div className="flex items-center space-x-3">
+                  <button onClick={() => setShowAboutPopup(prev => !prev)}>
+                    <AboutIcon />
+                  </button>
+                  <button onClick={() => setDarkMode(!darkMode)}>
+                    <DarkModeIcon />
+                  </button>
+                  <button onClick={signOut}>
+                    <SignOutIcon />
+                  </button>
+                </div>
+              </>
+            ) : (
+              // Navigation bar for users not signed in
+              <>
+                <div className="flex items-center space-x-3">
+                  <button onClick={() => setShowAboutPopup(prev => !prev)}>
+                    <AboutIcon />
+                  </button>
+                  <button onClick={() => setDarkMode(!darkMode)}>
+                    <DarkModeIcon />
+                  </button>
+                  <button onClick={signInWithGoogle}>
+                    <SignInIcon />
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </nav>
+        {user ? (
+          // User signed in (Main chat)
+          <>
+            <p className='pt-28 pb-2 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
               globe chat
             </p>
-            <p className="pb-5 font-light text-2xl tracking-normal text-gray-600 dark:text-gray-300 text-center">
-              a live chatting web app
+            <p className=' pb-1 font-normal font-body text-base tracking-widest text-gray-600 dark:text-gray-200 text-center lowercase'>
+              welcome {user.displayName}
             </p>
-            <div className="relative">
-              <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
-                <button onClick={signInWithGoogle}>
-                  <GoogleIcon />
-                </button>
-              </div>
-              <div className="flex justify-center mb-2">
-                <button onClick={signInAnonymously}>
-                  <AnonymousIcon />
-                </button>
-              </div>
-              <p className='py-14 pb-96 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
-                created by brandon vo
+            <p className="border-b border-gray-200 dark:border-gray-600 py-4 mb-4" />
+            <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
+              <AboutInfo />
+            </About>
+            <Chat user={user} db={db} />
+          </>
+        ) : (
+          // User not signed in (Home screen)
+          <>
+            <div>
+              <p className='pt-52 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
+                globe chat
               </p>
-              <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
-                <AboutInfo />
-              </About>
+              <p className="pb-5 font-light text-2xl tracking-normal text-gray-600 dark:text-gray-300 text-center">
+                a live chatting web app
+              </p>
+              <div className="relative">
+                <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
+                  <button onClick={signInWithGoogle}>
+                    <GoogleIcon />
+                  </button>
+                </div>
+                <div className="flex justify-center mb-2">
+                  <button onClick={signInAnonymously}>
+                    <AnonymousIcon />
+                  </button>
+                </div>
+                <p className='py-14 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
+                  created by brandon vo
+                </p>
+                <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
+                  <AboutInfo />
+                </About>
+              </div>
             </div>
-          </div>
-        </>
-      )}
-    </div >
+          </>
+        )}
+      </div >
+    </div>
   );
 }
 
