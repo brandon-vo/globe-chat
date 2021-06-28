@@ -53,6 +53,9 @@ function AboutInfo() {
                 Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
             </p><br />
             <p>
+                If the chat is not showing up, Firebase has reached it's maximum read capacity for the day. Work in progress to reduce this issue from occurring.
+            </p><br/>
+            <p>
                 Built with Javascript using React and Firebase as a database.
             </p><br />
             <p>Created by Brandon Vo</p>

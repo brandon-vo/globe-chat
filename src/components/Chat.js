@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
 import { UploadIcon, SubmitIcon } from './Icon';
+import { PlaySound } from './PlaySound';
 
 const Chat = ({ user = null, db = null }) => {
 
