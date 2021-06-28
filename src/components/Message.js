@@ -18,6 +18,7 @@ const Message = ({
     displayName = '',
     photoURL = '',
 }) => {
+
     return (
         <div className="px-4 py-4 rounded-md hover:bg-gray-50 dark:text-white dark:hover:bg-gray-600 overflow-hidden flex items-start">
             {photoURL ? (
