@@ -5,13 +5,13 @@ import DarkParticleConfig from '../config/dark-particle-config';
 
 function ParticleBackground() {
     return (
-        <Particles className="absolute w-full h-full pt-20" params={ParticleConfig}></Particles>
+        <Particles className="absolute w-full h-full" params={ParticleConfig}></Particles>
     )
 }
 
 function DarkParticleBackground() {
     return (
-        <Particles className="absolute w-full h-full pt-20" params={DarkParticleConfig}></Particles>
+        <Particles className="absolute w-full h-full" params={DarkParticleConfig}></Particles>
     )
 }
 
