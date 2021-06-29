@@ -9,7 +9,7 @@ function About(props) {
     // Popup animation
     const animation = useSpring({
         config: {
-            duration: 250
+            duration: 50
         },
         opacity: props.trigger ? 1 : 0
     })

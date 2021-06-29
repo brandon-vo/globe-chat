@@ -127,12 +127,13 @@ function CloseIcon() {
     )
 }
 
-function UploadIcon() {
+function EmojiIcon() {
     return (
         <div>
-            {/* Upload File Icon */}
+            {/* Emoji Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4
+                 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </div>
     )
@@ -150,4 +151,4 @@ function SubmitIcon() {
     )
 }
 
-export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, DarkModeIcon, SignInIcon, SignOutIcon, CloseIcon, UploadIcon, SubmitIcon };
+export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, DarkModeIcon, SignInIcon, SignOutIcon, CloseIcon, EmojiIcon, SubmitIcon };
