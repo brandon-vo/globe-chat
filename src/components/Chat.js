@@ -1,24 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
-import { UploadIcon, SubmitIcon } from './Icon';
-import { PlaySound } from './PlaySound';
+import { EmojiIcon, SubmitIcon } from './Icon';
+import useSound from 'use-sound';
+import messageSfx from '../assets/message.wav';
+import clickSfx from '../assets/click.wav';
 
 const Chat = ({ user = null, db = null }) => {
 
     const [messages, setMessages] = useState([]);
-    const [newMessage, setNewMessages] = useState('');
+    const [formValue, setFormValue] = useState('');
+    
+    const [messageSound] = useSound(messageSfx);
+    const [playbackRate, setPlaybackRate] = useState(0.75);
+    const [emojiSound] = useSound(clickSfx, {
+        playbackRate,
+        volume: 0.5,
+    });
 
     const { uid, displayName, photoURL } = user;
 
-    const inputRef = useRef();
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-        }
-    }, [inputRef]);
-
+    // Listen to all messages
     useEffect(() => {
         if (db) {
             const unsubscribe = db
@@ -36,58 +38,58 @@ const Chat = ({ user = null, db = null }) => {
         }
     }, [db]);
 
-    const handleOnChange = e => {
-        setNewMessages(e.target.value);
-    };
-
-    const handleOnSubmit = e => {
+    // Sending a message
+    const sendMessage = async (e) => {
         // Check if message contains over 1000 characters
-        if (newMessage.length > 1000) return alert('You cannot send a message that is longer than 1000 characters')
+        if (formValue.length > 1000) return alert('You cannot send a message that is longer than 1000 characters')
 
         // Check if message is empty
-        if (!newMessage.trim().length) return
+        if (!formValue.trim().length) return alert('You cannot send an empty message')
 
         e.preventDefault();
 
         // Adding to messages collection
         if (db) {
-            db.collection('messages').add({
-                text: newMessage,
+            await db.collection('messages').add({
+                text: formValue,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 uid,
                 displayName,
                 photoURL
             })
         }
-        setNewMessages('') // Clear text after submit
+        setFormValue('') // Clear text after submit
+        messageSound()
     }
 
-    const upload = () => {
-        alert('This feature is not implemented')
+    // Clicking the emoji button
+    const emojiClick = () => {
+        setPlaybackRate(playbackRate + 0.1);
+        emojiSound();
     }
 
     return (
         <div className="py-4 max-w-screen-lg mx-auto">
             <div className="mb-6 mx-4">
                 <form
-                    onSubmit={handleOnSubmit}
+                    onSubmit={sendMessage}
                     className="flex flex-row bg-gray-100 dark:bg-gray-600 dark:text-white rounded-md px-6 py-3 z-10 max-w-screen-lg mx-auto shadow-md">
                     <input
-                        ref={inputRef}
+                        // ref={inputRef}
                         type="text"
-                        value={newMessage}
-                        onChange={handleOnChange}
+                        value={formValue}
+                        onChange={(e) => setFormValue(e.target.value)}
                         placeHolder='type to send a message...'
                         className="flex-1 bg-transparent outline-none"
                     />
                     <button type="button"
-                        onClick={upload}
+                        onClick={emojiClick}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
                              dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:outline-none">
-                        <UploadIcon />
+                        <EmojiIcon />
                     </button>
                     <button type="submit"
-                        disabled={!newMessage}
+                        disabled={!formValue}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
                              dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px">
                         <SubmitIcon />

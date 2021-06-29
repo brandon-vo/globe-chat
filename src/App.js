@@ -5,11 +5,21 @@ import Chat from './components/Chat';
 import { About, AboutInfo } from './components/Popup';
 import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, DarkModeIcon, SignInIcon, SignOutIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
+import useSound from 'use-sound';
+import buttonSfx from './assets/button.wav';
+import clickSfx from './assets/click.wav';
+import switchSfx from './assets/switch.wav';
+import signOutSfx from './assets/signOut.wav';
 
 function App() {
   const [user, setUser] = useState(() => auth.currentUser);
   const [showAboutPopup, setShowAboutPopup] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+
+  const [buttonSound] = useSound(buttonSfx);
+  const [clickSound] = useSound(clickSfx);
+  const [switchSound] = useSound(switchSfx);
+  const [signOutSound] = useSound(signOutSfx);
 
   // Setting user when signing in or out
   useEffect(() => {
@@ -25,6 +35,7 @@ function App() {
 
   // Google sign in
   const signInWithGoogle = () => {
+    buttonSound()
     const provider = new firebase.auth.GoogleAuthProvider()
     auth.useDeviceLanguage();
     auth.signInWithPopup(provider).catch(error => console.error(error));
@@ -32,6 +43,7 @@ function App() {
 
   // Anonymous sign in
   const signInAnonymously = () => {
+    buttonSound()
     auth.useDeviceLanguage();
     auth.signInAnonymously().then(user => {
       user.user.updateProfile({
@@ -44,7 +56,20 @@ function App() {
 
   // Sign out
   const signOut = () => {
-    auth.signOut().catch(error => alert(error));
+    auth.signOut().catch(error => alert(error))
+    signOutSound()
+  }
+
+  // About pop up
+  const aboutPopUp = () => {
+    setShowAboutPopup(prev => !prev)
+    clickSound()
+  }
+
+  // Toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+    switchSound()
   }
 
   return (
@@ -64,10 +89,10 @@ function App() {
               // Navigation bar for users signed in
               <>
                 <div className="flex items-center space-x-3">
-                  <button onClick={() => setShowAboutPopup(prev => !prev)}>
+                  <button onClick={aboutPopUp}>
                     <AboutIcon />
                   </button>
-                  <button onClick={() => setDarkMode(!darkMode)}>
+                  <button onClick={toggleDarkMode}>
                     <DarkModeIcon />
                   </button>
                   <button onClick={signOut}>
@@ -79,10 +104,10 @@ function App() {
               // Navigation bar for users not signed in
               <>
                 <div className="flex items-center space-x-3">
-                  <button onClick={() => setShowAboutPopup(prev => !prev)}>
+                  <button onClick={aboutPopUp}>
                     <AboutIcon />
                   </button>
-                  <button onClick={() => setDarkMode(!darkMode)}>
+                  <button onClick={toggleDarkMode}>
                     <DarkModeIcon />
                   </button>
                   <button onClick={signInWithGoogle}>
@@ -129,7 +154,7 @@ function App() {
                     <AnonymousIcon />
                   </button>
                 </div>
-                <p className='py-14 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
+                <p className='pt-14 pb-2 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
                   created by brandon vo
                 </p>
                 <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
