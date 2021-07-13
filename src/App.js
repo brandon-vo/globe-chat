@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/app'
 import Chat from './components/Chat';
 import { About, AboutInfo } from './components/Popup';
-import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, DarkModeIcon, SignInIcon, SignOutIcon } from './components/Icon';
+import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
 import useSound from 'use-sound';
 import buttonSfx from './assets/button.wav';
@@ -12,10 +12,11 @@ import switchSfx from './assets/switch.wav';
 import signOutSfx from './assets/signOut.wav';
 
 function App() {
-  const [user, setUser] = useState(() => auth.currentUser);
-  const [showAboutPopup, setShowAboutPopup] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
+  const [user, setUser] = useState(() => auth.currentUser); // Setting user
+  const [showAboutPopup, setShowAboutPopup] = useState(false); // About pop up initially disabled
+  const [darkMode, setDarkMode] = useState(true); // Dark mode initially enabled
 
+  // Sounds
   const [buttonSound] = useSound(buttonSfx);
   const [clickSound] = useSound(clickSfx);
   const [switchSound] = useSound(switchSfx);
@@ -35,7 +36,7 @@ function App() {
 
   // Google sign in
   const signInWithGoogle = () => {
-    buttonSound()
+    buttonSound();
     const provider = new firebase.auth.GoogleAuthProvider()
     auth.useDeviceLanguage();
     auth.signInWithPopup(provider).catch(error => console.error(error));
@@ -43,7 +44,7 @@ function App() {
 
   // Anonymous sign in
   const signInAnonymously = () => {
-    buttonSound()
+    buttonSound();
     auth.useDeviceLanguage();
     auth.signInAnonymously().then(user => {
       user.user.updateProfile({
@@ -57,20 +58,23 @@ function App() {
   // Sign out
   const signOut = () => {
     auth.signOut().catch(error => alert(error))
-    signOutSound()
+    signOutSound();
   }
 
   // About pop up
   const aboutPopUp = () => {
     setShowAboutPopup(prev => !prev)
-    clickSound()
+    clickSound();
   }
 
-  // Toggle dark mode
+  // Toggle between dark mode and light mode
   const toggleDarkMode = () => {
     setDarkMode(!darkMode)
-    switchSound()
+    switchSound();
   }
+
+  // Changing between moon and sun icon when toggling dark mode
+  const ModeIcon = darkMode ? MoonIcon : SunIcon
 
   return (
     <div className={`${darkMode ? 'dark' : ''}`}>
@@ -93,7 +97,7 @@ function App() {
                     <AboutIcon />
                   </button>
                   <button onClick={toggleDarkMode}>
-                    <DarkModeIcon />
+                    <ModeIcon />
                   </button>
                   <button onClick={signOut}>
                     <SignOutIcon />
@@ -108,7 +112,7 @@ function App() {
                     <AboutIcon />
                   </button>
                   <button onClick={toggleDarkMode}>
-                    <DarkModeIcon />
+                    <ModeIcon />
                   </button>
                   <button onClick={signInWithGoogle}>
                     <SignInIcon />

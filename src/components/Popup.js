@@ -4,6 +4,7 @@ import { CloseIcon } from './Icon.js';
 
 function About(props) {
 
+    // Popup
     const popupRef = useRef()
 
     // Popup animation
@@ -52,9 +53,6 @@ function AboutInfo() {
             <p> Globe Chat is a real-time web app used to chat with anybody around the world.
                 Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
             </p><br />
-            <p>
-                If the chat is not showing up, Firebase has reached it's maximum read capacity for the day. Work in progress to reduce this issue from occurring.
-            </p><br/>
             <p>
                 Built with Javascript using React and Firebase as a database.
             </p><br />
