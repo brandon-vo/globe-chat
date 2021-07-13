@@ -8,16 +8,19 @@ import clickSfx from '../assets/click.wav';
 
 const Chat = ({ user = null, db = null }) => {
 
+    // Messages
     const [messages, setMessages] = useState([]);
     const [formValue, setFormValue] = useState('');
-    
-    const [messageSound] = useSound(messageSfx);
+
+    // Sounds
+    const [messageSound] = useSound(messageSfx, { volume: 0.4 });
     const [playbackRate, setPlaybackRate] = useState(0.75);
     const [emojiSound] = useSound(clickSfx, {
         playbackRate,
         volume: 0.5,
     });
 
+    // User
     const { uid, displayName, photoURL } = user;
 
     // Listen to all messages
@@ -75,7 +78,6 @@ const Chat = ({ user = null, db = null }) => {
                     onSubmit={sendMessage}
                     className="flex flex-row bg-gray-100 dark:bg-gray-600 dark:text-white rounded-md px-6 py-3 z-10 max-w-screen-lg mx-auto shadow-md">
                     <input
-                        // ref={inputRef}
                         type="text"
                         value={formValue}
                         onChange={(e) => setFormValue(e.target.value)}
