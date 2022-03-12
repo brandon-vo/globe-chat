@@ -8,7 +8,7 @@ const DarkParticleConfig = {
             }
         },
         color: {
-            value: "#374151"
+            value: "#636e72"
         },
         shape: {
             type: "circle",
@@ -19,14 +19,9 @@ const DarkParticleConfig = {
             polygon: {
                 nb_sides: 5
             },
-            image: {
-                src: "img/github.svg",
-                width: 100,
-                height: 100
-            }
         },
         opacity: {
-            value: 0.4,
+            value: 0.6,
             random: true,
             anim: {
                 enable: true,
@@ -107,6 +102,7 @@ const DarkParticleConfig = {
         }
     },
     retina_detect: true
+    
 }
 
 export default DarkParticleConfig;

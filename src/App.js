@@ -3,13 +3,12 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/app'
 import Chat from './components/Chat';
 import { About, AboutInfo } from './components/Popup';
-import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon } from './components/Icon';
+import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, NewIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
 import useSound from 'use-sound';
-import buttonSfx from './assets/button.wav';
-import clickSfx from './assets/click.wav';
-import switchSfx from './assets/switch.wav';
-import signOutSfx from './assets/signOut.wav';
+import avatars from './assets/avatars/avatar';
+import sounds from './assets/sounds/sounds';
+import { BrowserView } from 'react-device-detect';
 import './App.css';
 
 function App() {
@@ -19,13 +18,18 @@ function App() {
   if (localStorage.getItem('dark') === 'false') {
     darkTheme = false;
   }
+  let contentSize = true;
+  if (localStorage.getItem('size') === 'false') {
+    contentSize = false;
+  }
   const [darkMode, setDarkMode] = useState(darkTheme); // Dark mode initially enabled
+  const [defaultSize, setDefaultSize] = useState(contentSize);
 
   // Sounds
-  const [buttonSound] = useSound(buttonSfx);
-  const [clickSound] = useSound(clickSfx);
-  const [switchSound] = useSound(switchSfx);
-  const [signOutSound] = useSound(signOutSfx);
+  const [buttonSound] = useSound(sounds.button);
+  const [clickSound] = useSound(sounds.click);
+  const [switchSound] = useSound(sounds.switch);
+  const [signOutSound] = useSound(sounds.signOut);
 
   // Setting user when signing in or out
   useEffect(() => {
@@ -47,14 +51,23 @@ function App() {
     auth.signInWithPopup(provider).catch(error => console.error(error));
   }
 
+  const randomAvatar = () => {
+    let max = 20;
+    let num = 1;
+    let randomNum = Math.floor(Math.random() * max);
+    let avatarArr = Array(max).fill().map(() => avatars[num++])
+    let avatar = avatarArr[randomNum];
+    return avatar;
+  }
+
   // Anonymous sign in
   const signInAnonymously = () => {
     buttonSound();
     auth.useDeviceLanguage();
     auth.signInAnonymously().then(user => {
       user.user.updateProfile({
-        displayName: "Anonymous " + (Math.random() * 999999 + 1).toFixed(0),
-        photoURL: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+        displayName: "Anonymous " + Math.floor(Math.random() * 999999 + 1),
+        photoURL: randomAvatar()
       })
     })
       .catch(error => alert(error));
@@ -69,6 +82,16 @@ function App() {
   // About pop up
   const aboutPopUp = () => {
     setShowAboutPopup(prev => !prev)
+    clickSound();
+  }
+
+  const changeLayout = () => {
+    if (defaultSize) {
+      localStorage.setItem('size', false);
+    } else {
+      localStorage.setItem('size', true);
+    }
+    setDefaultSize(!defaultSize);
     clickSound();
   }
 
@@ -102,6 +125,11 @@ function App() {
                   <button onClick={aboutPopUp}>
                     <AboutIcon />
                   </button>
+                  <BrowserView>
+                    <button onClick={changeLayout}>
+                      <NewIcon />
+                    </button>
+                  </BrowserView>
                   <button onClick={toggleDarkMode}>
                     <ModeIcon />
                   </button>
