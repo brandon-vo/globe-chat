@@ -69,6 +69,10 @@ const Chat = ({ user = null, db = null }) => {
     const emojiClick = () => {
         setPlaybackRate(playbackRate + 0.1);
         emojiSound();
+
+        if (playbackRate > 10) {
+            setPlaybackRate(0.5);
+        }
     }
 
     return (
@@ -81,19 +85,19 @@ const Chat = ({ user = null, db = null }) => {
                         type="text"
                         value={formValue}
                         onChange={(e) => setFormValue(e.target.value)}
-                        placeHolder='type to send a message...'
+                        placeHolder='please be kind to others...'
                         className="flex-1 bg-transparent outline-none"
                     />
                     <button type="button"
                         onClick={emojiClick}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:outline-none">
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
                         <EmojiIcon />
                     </button>
                     <button type="submit"
                         disabled={!formValue}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px">
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
                         <SubmitIcon />
                     </button>
                 </form>
