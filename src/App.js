@@ -10,11 +10,16 @@ import buttonSfx from './assets/button.wav';
 import clickSfx from './assets/click.wav';
 import switchSfx from './assets/switch.wav';
 import signOutSfx from './assets/signOut.wav';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(() => auth.currentUser); // Setting user
   const [showAboutPopup, setShowAboutPopup] = useState(false); // About pop up initially disabled
-  const [darkMode, setDarkMode] = useState(true); // Dark mode initially enabled
+  let darkTheme = true;
+  if (localStorage.getItem('dark') === 'false') {
+    darkTheme = false;
+  }
+  const [darkMode, setDarkMode] = useState(darkTheme); // Dark mode initially enabled
 
   // Sounds
   const [buttonSound] = useSound(buttonSfx);
@@ -69,6 +74,7 @@ function App() {
 
   // Toggle between dark mode and light mode
   const toggleDarkMode = () => {
+    localStorage.setItem('dark', !darkMode);
     setDarkMode(!darkMode)
     switchSound();
   }
@@ -125,10 +131,10 @@ function App() {
         {user ? (
           // User signed in (Main chat)
           <>
-            <p className='pt-28 pb-2 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
+            <p className='pt-28 pb-4 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
               globe chat
             </p>
-            <p className=' pb-1 font-normal font-body text-base tracking-widest text-gray-600 dark:text-gray-200 text-center lowercase'>
+            <p className=' font-normal font-body text-base tracking-widest text-gray-600 dark:text-gray-200 text-center lowercase'>
               welcome {user.displayName}
             </p>
             <p className="border-b border-gray-200 dark:border-gray-600 py-4 mb-4" />
@@ -140,30 +146,32 @@ function App() {
         ) : (
           // User not signed in (Home screen)
           <>
-            <div>
-              <p className='pt-52 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
-                globe chat
-              </p>
-              <p className="pb-5 font-light text-2xl tracking-normal text-gray-600 dark:text-gray-300 text-center">
-                a live chatting web app
-              </p>
-              <div className="relative">
-                <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
-                  <button onClick={signInWithGoogle}>
-                    <GoogleIcon />
-                  </button>
-                </div>
-                <div className="flex justify-center mb-2">
-                  <button onClick={signInAnonymously}>
-                    <AnonymousIcon />
-                  </button>
-                </div>
-                <p className='pt-14 pb-2 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
-                  created by brandon vo
+            <div class="flex h-screen">
+              <div class="m-auto">
+                <p className='pb-2 font-medium text-5xl tracking-wider text-black dark:text-white text-center'>
+                  globe chat
                 </p>
-                <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
-                  <AboutInfo />
-                </About>
+                <p className="pb-5 font-light text-2xl tracking-normal text-gray-600 dark:text-gray-300 text-center">
+                  a live chatting web app
+                </p>
+                <div className="relative">
+                  <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
+                    <button onClick={signInWithGoogle}>
+                      <GoogleIcon />
+                    </button>
+                  </div>
+                  <div className="flex justify-center mb-2">
+                    <button onClick={signInAnonymously}>
+                      <AnonymousIcon />
+                    </button>
+                  </div>
+                  <p className='pt-6 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center'>
+                    created by brandon vo
+                  </p>
+                  <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
+                    <AboutInfo />
+                  </About>
+                </div>
               </div>
             </div>
           </>

@@ -29,7 +29,7 @@ const Chat = ({ user = null, db = null }) => {
             const unsubscribe = db
                 .collection('messages')
                 .orderBy('createdAt', 'desc')
-                .limit(50)
+                .limit(100)
                 .onSnapshot(querySnapshot => {
                     const data = querySnapshot.docs.map(doc => ({
                         ...doc.data(),
