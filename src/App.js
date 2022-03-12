@@ -12,6 +12,17 @@ import switchSfx from './assets/switch.wav';
 import signOutSfx from './assets/signOut.wav';
 import './App.css';
 
+import avatar1 from './assets/avatars/avatar-1.jpg';
+import avatar2 from './assets/avatars/avatar-2.jpg';
+import avatar3 from './assets/avatars/avatar-3.jpg';
+import avatar4 from './assets/avatars/avatar-4.jpg';
+import avatar5 from './assets/avatars/avatar-5.jpg';
+import avatar6 from './assets/avatars/avatar-6.jpg';
+import avatar7 from './assets/avatars/avatar-7.jpg';
+import avatar8 from './assets/avatars/avatar-8.jpg';
+import avatar9 from './assets/avatars/avatar-9.jpg';
+import avatar10 from './assets/avatars/avatar-10.jpg';
+
 function App() {
   const [user, setUser] = useState(() => auth.currentUser); // Setting user
   const [showAboutPopup, setShowAboutPopup] = useState(false); // About pop up initially disabled
@@ -47,6 +58,13 @@ function App() {
     auth.signInWithPopup(provider).catch(error => console.error(error));
   }
 
+  const randomAvatar = () => {
+    let randomNum = Math.floor(Math.random() * 10 + 1);
+    let avatarArr = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9, avatar10];
+    let avatar = avatarArr[randomNum];
+    return avatar;
+  }
+
   // Anonymous sign in
   const signInAnonymously = () => {
     buttonSound();
@@ -54,7 +72,7 @@ function App() {
     auth.signInAnonymously().then(user => {
       user.user.updateProfile({
         displayName: "Anonymous " + (Math.random() * 999999 + 1).toFixed(0),
-        photoURL: "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"
+        photoURL: randomAvatar()
       })
     })
       .catch(error => alert(error));

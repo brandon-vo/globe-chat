@@ -39,7 +39,7 @@ const Message = ({
                     </span>
                 ) : null}
                 </div>
-                <p>{text}</p>
+                <p className={displayName === 'Brandon Vo' ? 'text-blue-400' : ''}>{text}</p>
             </div>
         </div>
     );
