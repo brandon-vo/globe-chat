@@ -28,7 +28,7 @@ const Chat = ({ user = null, db = null }) => {
             const unsubscribe = db
                 .collection('messages')
                 .orderBy('createdAt', 'desc')
-                .limit(100)
+                .limit(75)
                 .onSnapshot(querySnapshot => {
                     const data = querySnapshot.docs.map(doc => ({
                         ...doc.data(),
@@ -74,8 +74,13 @@ const Chat = ({ user = null, db = null }) => {
         }
     }
 
+    let config = "py-4 max-w-screen-lg mx-auto";
+    if (localStorage.getItem('size') === 'false') {
+        config = "py-4 max-w-screen-sm mx-auto"
+    }
+
     return (
-        <div className="py-4 max-w-screen-lg mx-auto">
+        <div className={config}>
             <div className="mb-6 mx-4">
                 <form
                     onSubmit={sendMessage}

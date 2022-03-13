@@ -169,4 +169,14 @@ function SubmitIcon() {
     )
 }
 
-export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, CloseIcon, EmojiIcon, SubmitIcon };
+function NewIcon() {
+    return (
+        <button
+            className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
+                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 px-4 py-1 z-10 rounded transition-all shadow-inner">
+            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+        </button>
+    )
+}
+
+export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, CloseIcon, EmojiIcon, SubmitIcon, NewIcon };

@@ -50,7 +50,7 @@ const Message = ({
                         </span>
                     ) : null}
                 </div>
-                <p className={displayName === 'Brandon Vo' ? 'text-blue-400' : ''}>{text}</p>
+                <p className={uid === '3y8XlQiLCscOR3uQ7UwrSCHgF932' ? 'text-green-500' : ''}>{text}</p>
             </div>
         </div>
     );

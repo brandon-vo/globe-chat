@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/app'
 import Chat from './components/Chat';
 import { About, AboutInfo } from './components/Popup';
-import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon } from './components/Icon';
+import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, NewIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
 import useSound from 'use-sound';
 import avatars from './assets/avatars/avatar';
@@ -17,7 +17,12 @@ function App() {
   if (localStorage.getItem('dark') === 'false') {
     darkTheme = false;
   }
+  let contentSize = true;
+  if (localStorage.getItem('size') === 'false') {
+    contentSize = false;
+  }
   const [darkMode, setDarkMode] = useState(darkTheme); // Dark mode initially enabled
+  const [defaultSize, setDefaultSize] = useState(contentSize);
 
   // Sounds
   const [buttonSound] = useSound(sounds.button);
@@ -79,6 +84,16 @@ function App() {
     clickSound();
   }
 
+  const changeLayout = () => {
+    if (defaultSize) {
+      localStorage.setItem('size', false);
+    } else {
+      localStorage.setItem('size', true);
+    }
+    setDefaultSize(!defaultSize);
+    clickSound();
+  }
+
   // Toggle between dark mode and light mode
   const toggleDarkMode = () => {
     localStorage.setItem('dark', !darkMode);
@@ -108,6 +123,9 @@ function App() {
                 <div className="flex items-center space-x-3">
                   <button onClick={aboutPopUp}>
                     <AboutIcon />
+                  </button>
+                  <button onClick={changeLayout}>
+                    <NewIcon />
                   </button>
                   <button onClick={toggleDarkMode}>
                     <ModeIcon />
