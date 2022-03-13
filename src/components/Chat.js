@@ -3,8 +3,7 @@ import firebase from 'firebase/app';
 import Message from './Message';
 import { EmojiIcon, SubmitIcon } from './Icon';
 import useSound from 'use-sound';
-import messageSfx from '../assets/message.wav';
-import clickSfx from '../assets/click.wav';
+import sounds from '../assets/sounds/sounds';
 
 const Chat = ({ user = null, db = null }) => {
 
@@ -13,9 +12,9 @@ const Chat = ({ user = null, db = null }) => {
     const [formValue, setFormValue] = useState('');
 
     // Sounds
-    const [messageSound] = useSound(messageSfx, { volume: 0.4 });
+    const [messageSound] = useSound(sounds.message, { volume: 0.4 });
     const [playbackRate, setPlaybackRate] = useState(0.75);
-    const [emojiSound] = useSound(clickSfx, {
+    const [emojiSound] = useSound(sounds.click, {
         playbackRate,
         volume: 0.5,
     });
