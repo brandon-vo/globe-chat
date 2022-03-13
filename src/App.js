@@ -8,6 +8,7 @@ import { ParticleBackground, DarkParticleBackground } from './components/Particl
 import useSound from 'use-sound';
 import avatars from './assets/avatars/avatar';
 import sounds from './assets/sounds/sounds';
+import { BrowserView } from 'react-device-detect';
 import './App.css';
 
 function App() {
@@ -124,9 +125,11 @@ function App() {
                   <button onClick={aboutPopUp}>
                     <AboutIcon />
                   </button>
-                  <button onClick={changeLayout}>
-                    <NewIcon />
-                  </button>
+                  <BrowserView>
+                    <button onClick={changeLayout}>
+                      <NewIcon />
+                    </button>
+                  </BrowserView>
                   <button onClick={toggleDarkMode}>
                     <ModeIcon />
                   </button>

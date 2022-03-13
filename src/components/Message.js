@@ -41,7 +41,7 @@ const Message = ({
                     ) : null}
                     {verified ? (
                         <div className='mr-2'>
-                            <img src={verifiedIcon} width={15} height={15} />
+                            <img src={verifiedIcon} width={15} height={15} alt="Verified"/>
                         </div>
                     ) : null}
                     {createdAt?.seconds ? (
