@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
-import { MusicIcon, SubmitIcon } from './Icon';
+import { SubmitIcon, NewIcon } from './Icon';
 import useSound from 'use-sound';
 import sounds from '../assets/sounds/sounds';
+import { BrowserView } from 'react-device-detect';
 
 const Chat = ({ user = null, db = null }) => {
 
@@ -13,13 +14,9 @@ const Chat = ({ user = null, db = null }) => {
 
     // Sounds
     const [messageSound] = useSound(sounds.message, { volume: 0.4 });
-    const [playbackRate, setPlaybackRate] = useState(0.6);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [musicSound, { stop }] = useSound(sounds.background, {
-        playbackRate,
-        volume: 0.4,
-    });
-    const [clickSound] = useSound(sounds.click, {volume: 0.4 });
+    const [clickSound] = useSound(sounds.click);
+
+    const [defaultSize, setDefaultSize] = useState(localStorage.getItem('size') === 'false' ? false : true);
 
     // User
     const { uid, displayName, photoURL } = user;
@@ -66,20 +63,14 @@ const Chat = ({ user = null, db = null }) => {
         messageSound()
     }
 
-    // Clicking the music button
-    const musicClick = () => {
-        setPlaybackRate(playbackRate + 0.1);
-        setIsPlaying(!isPlaying);
-
-        if (isPlaying) {
-            stop();
+    const changeLayout = () => {
+        if (defaultSize) {
+            localStorage.setItem('size', false);
         } else {
-            musicSound();
+            localStorage.setItem('size', true);
         }
+        setDefaultSize(!defaultSize);
         clickSound();
-        if (playbackRate > 4) {
-            setPlaybackRate(0.5);
-        }
     }
 
     let config = "py-4 max-w-screen-lg mx-auto";
@@ -100,12 +91,12 @@ const Chat = ({ user = null, db = null }) => {
                         placeHolder='please be kind to others...'
                         className="flex-1 bg-transparent outline-none"
                     />
-                    <button type="button"
-                        onClick={musicClick}
-                        className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
-                        <MusicIcon />
-                    </button>
+                    <BrowserView>
+                        <button type="button" onClick={changeLayout}
+                            className="dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
+                            <NewIcon />
+                        </button>
+                    </BrowserView>
                     <button type="submit"
                         disabled={!formValue}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
@@ -113,7 +104,7 @@ const Chat = ({ user = null, db = null }) => {
                         <SubmitIcon />
                     </button>
                 </form>
-            </div>
+            </div >
             <ul>
                 {messages.map(message => (
                     <li key={message.id}>
@@ -121,7 +112,7 @@ const Chat = ({ user = null, db = null }) => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </div >
     );
 };
 
