@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
-import { EmojiIcon, SubmitIcon } from './Icon';
+import { SubmitIcon, NewIcon } from './Icon';
 import useSound from 'use-sound';
 import sounds from '../assets/sounds/sounds';
+import { BrowserView } from 'react-device-detect';
 
 const Chat = ({ user = null, db = null }) => {
 
@@ -13,11 +14,9 @@ const Chat = ({ user = null, db = null }) => {
 
     // Sounds
     const [messageSound] = useSound(sounds.message, { volume: 0.4 });
-    const [playbackRate, setPlaybackRate] = useState(0.75);
-    const [emojiSound] = useSound(sounds.click, {
-        playbackRate,
-        volume: 0.5,
-    });
+    const [clickSound] = useSound(sounds.click);
+
+    const [defaultSize, setDefaultSize] = useState(localStorage.getItem('size') === 'false' ? false : true);
 
     // User
     const { uid, displayName, photoURL } = user;
@@ -64,14 +63,14 @@ const Chat = ({ user = null, db = null }) => {
         messageSound()
     }
 
-    // Clicking the emoji button
-    const emojiClick = () => {
-        setPlaybackRate(playbackRate + 0.1);
-        emojiSound();
-
-        if (playbackRate > 10) {
-            setPlaybackRate(0.5);
+    const changeLayout = () => {
+        if (defaultSize) {
+            localStorage.setItem('size', false);
+        } else {
+            localStorage.setItem('size', true);
         }
+        setDefaultSize(!defaultSize);
+        clickSound();
     }
 
     let config = "py-4 max-w-screen-lg mx-auto";
@@ -92,20 +91,20 @@ const Chat = ({ user = null, db = null }) => {
                         placeHolder='please be kind to others...'
                         className="flex-1 bg-transparent outline-none"
                     />
-                    <button type="button"
-                        onClick={emojiClick}
-                        className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
-                        <EmojiIcon />
-                    </button>
+                    <BrowserView>
+                        <button type="button" onClick={changeLayout}
+                            className="dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
+                            <NewIcon />
+                        </button>
+                    </BrowserView>
                     <button type="submit"
                         disabled={!formValue}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
                         <SubmitIcon />
                     </button>
                 </form>
-            </div>
+            </div >
             <ul>
                 {messages.map(message => (
                     <li key={message.id}>
@@ -113,7 +112,7 @@ const Chat = ({ user = null, db = null }) => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </div >
     );
 };
 

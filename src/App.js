@@ -3,33 +3,31 @@ import React, { useEffect, useState } from 'react';
 import firebase from 'firebase/app'
 import Chat from './components/Chat';
 import { About, AboutInfo } from './components/Popup';
-import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, NewIcon } from './components/Icon';
+import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, MusicIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
 import useSound from 'use-sound';
-import avatars from './assets/avatars/avatar';
+import avatars from './assets/images/avatars/avatar';
 import sounds from './assets/sounds/sounds';
-import { BrowserView } from 'react-device-detect';
+
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(() => auth.currentUser); // Setting user
   const [showAboutPopup, setShowAboutPopup] = useState(false); // About pop up initially disabled
-  let darkTheme = true;
-  if (localStorage.getItem('dark') === 'false') {
-    darkTheme = false;
-  }
-  let contentSize = true;
-  if (localStorage.getItem('size') === 'false') {
-    contentSize = false;
-  }
-  const [darkMode, setDarkMode] = useState(darkTheme); // Dark mode initially enabled
-  const [defaultSize, setDefaultSize] = useState(contentSize);
+
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('dark') === 'false' ? false : true); 
 
   // Sounds
   const [buttonSound] = useSound(sounds.button);
   const [clickSound] = useSound(sounds.click);
   const [switchSound] = useSound(sounds.switch);
   const [signOutSound] = useSound(sounds.signOut);
+  const [playbackRate, setPlaybackRate] = useState(0.6);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [musicSound, { stop }] = useSound(sounds.background, {
+    playbackRate,
+    volume: 0.4,
+  });
 
   // Setting user when signing in or out
   useEffect(() => {
@@ -85,14 +83,20 @@ function App() {
     clickSound();
   }
 
-  const changeLayout = () => {
-    if (defaultSize) {
-      localStorage.setItem('size', false);
+  // Clicking the music button
+  const musicClick = () => {
+    setPlaybackRate(playbackRate + 0.1);
+    setIsPlaying(!isPlaying);
+
+    if (isPlaying) {
+      stop();
     } else {
-      localStorage.setItem('size', true);
+      musicSound();
     }
-    setDefaultSize(!defaultSize);
     clickSound();
+    if (playbackRate > 4) {
+      setPlaybackRate(0.5);
+    }
   }
 
   // Toggle between dark mode and light mode
@@ -125,11 +129,9 @@ function App() {
                   <button onClick={aboutPopUp}>
                     <AboutIcon />
                   </button>
-                  <BrowserView>
-                    <button onClick={changeLayout}>
-                      <NewIcon />
-                    </button>
-                  </BrowserView>
+                  <button onClick={musicClick}>
+                    <MusicIcon />
+                  </button>
                   <button onClick={toggleDarkMode}>
                     <ModeIcon />
                   </button>
@@ -144,6 +146,9 @@ function App() {
                 <div className="flex items-center space-x-3">
                   <button onClick={aboutPopUp}>
                     <AboutIcon />
+                  </button>
+                  <button onClick={musicClick}>
+                    <MusicIcon />
                   </button>
                   <button onClick={toggleDarkMode}>
                     <ModeIcon />

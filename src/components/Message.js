@@ -40,7 +40,7 @@ const Message = ({
                         <p className="mr-2 text-primary-500">{displayName}</p>
                     ) : null}
                     {verified ? (
-                        <div className='mr-2'>
+                        <div className='-ml-1 mr-2'>
                             <img src={verifiedIcon} width={15} height={15} alt="Verified"/>
                         </div>
                     ) : null}

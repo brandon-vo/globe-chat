@@ -10,7 +10,7 @@ function Logo() {
                         2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                 </svg>
             </a>
-            <span class="font-semibold text-lg font-body dark:text-white">
+            <span class="font-semibold sm:text-lg text-sm font-body dark:text-white">
                 Globe Chat
             </span>
         </div>
@@ -69,7 +69,7 @@ function AboutIcon() {
     return (
         <button
             className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
-                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 px-4 py-1 z-10 rounded transition-all shadow-inner">
+                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
             {/* Information Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -82,7 +82,7 @@ const MoonIcon = () => {
     return (
         <div
             className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
-                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 px-4 py-1 z-10 rounded transition-all shadow-inner">
+                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
             {/* Moon Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646
@@ -96,7 +96,7 @@ const SunIcon = () => {
     return (
         <div
             className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
-                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 px-4 py-1 z-10 rounded transition-all shadow-inner">
+                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4
                  12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
@@ -110,7 +110,7 @@ function SignInIcon() {
     return (
         <div
             className="text-sm font-thin text-primary-500 hover:bg-green-200 tracking-wide hover:bg-primary-500
-                bg-gradient-to-r from-green-500 to-green-200 dark:text-white px-4 py-1 z-10 rounded transition-all shadow-inner">
+                bg-gradient-to-r from-green-500 to-green-200 dark:text-white sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
             {/* Sign In Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5
@@ -124,7 +124,7 @@ function SignOutIcon() {
     return (
         <div
             className="text-sm font-thin text-primary-500 hover:bg-red-400 tracking-wide hover:bg-primary-500
-                bg-gradient-to-r from-red-500 to-red-200 dark:text-white px-4 py-1 z-10 rounded transition-all shadow-inner">
+                bg-gradient-to-r from-red-500 to-red-200 dark:text-white sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
             {/* Sign Out Icon */}
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3
@@ -145,17 +145,30 @@ function CloseIcon() {
     )
 }
 
-function EmojiIcon() {
+// function EmojiIcon() {
+//     return (
+//         <div>
+//             {/* Emoji Icon */}
+//             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+//                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4
+//                  4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+//             </svg>
+//         </div>
+//     )
+// }
+
+function MusicIcon() {
     return (
-        <div>
-            {/* Emoji Icon */}
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4
-                 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <button
+            className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
+                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
             </svg>
-        </div>
+        </button>
     )
 }
+
 
 function SubmitIcon() {
     return (
@@ -171,12 +184,15 @@ function SubmitIcon() {
 
 function NewIcon() {
     return (
-        <button
-            className="text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500
-                bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 px-4 py-1 z-10 rounded transition-all shadow-inner">
-            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-        </button>
+        <div>
+            <svg class="w-6 h-6 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2
+                  2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+            </svg>
+        </div>
+
     )
 }
 
-export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, CloseIcon, EmojiIcon, SubmitIcon, NewIcon };
+export { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, CloseIcon, MusicIcon, SubmitIcon, NewIcon };
