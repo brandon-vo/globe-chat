@@ -6,7 +6,7 @@ import { About, AboutInfo } from './components/Popup';
 import { Logo, GoogleIcon, AnonymousIcon, AboutIcon, MoonIcon, SunIcon, SignInIcon, SignOutIcon, NewIcon } from './components/Icon';
 import { ParticleBackground, DarkParticleBackground } from './components/ParticleBackground';
 import useSound from 'use-sound';
-import avatars from './assets/avatars/avatar';
+import avatars from './assets/images/avatars/avatar';
 import sounds from './assets/sounds/sounds';
 import { BrowserView } from 'react-device-detect';
 import './App.css';

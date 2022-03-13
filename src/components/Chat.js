@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import Message from './Message';
-import { EmojiIcon, SubmitIcon } from './Icon';
+import { MusicIcon, SubmitIcon } from './Icon';
 import useSound from 'use-sound';
 import sounds from '../assets/sounds/sounds';
 
@@ -13,11 +13,13 @@ const Chat = ({ user = null, db = null }) => {
 
     // Sounds
     const [messageSound] = useSound(sounds.message, { volume: 0.4 });
-    const [playbackRate, setPlaybackRate] = useState(0.75);
-    const [emojiSound] = useSound(sounds.click, {
+    const [playbackRate, setPlaybackRate] = useState(0.6);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [musicSound, { stop }] = useSound(sounds.background, {
         playbackRate,
-        volume: 0.5,
+        volume: 0.4,
     });
+    const [clickSound] = useSound(sounds.click, {volume: 0.4 });
 
     // User
     const { uid, displayName, photoURL } = user;
@@ -64,12 +66,18 @@ const Chat = ({ user = null, db = null }) => {
         messageSound()
     }
 
-    // Clicking the emoji button
-    const emojiClick = () => {
+    // Clicking the music button
+    const musicClick = () => {
         setPlaybackRate(playbackRate + 0.1);
-        emojiSound();
+        setIsPlaying(!isPlaying);
 
-        if (playbackRate > 10) {
+        if (isPlaying) {
+            stop();
+        } else {
+            musicSound();
+        }
+        clickSound();
+        if (playbackRate > 4) {
             setPlaybackRate(0.5);
         }
     }
@@ -93,15 +101,15 @@ const Chat = ({ user = null, db = null }) => {
                         className="flex-1 bg-transparent outline-none"
                     />
                     <button type="button"
-                        onClick={emojiClick}
+                        onClick={musicClick}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
-                        <EmojiIcon />
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
+                        <MusicIcon />
                     </button>
                     <button type="submit"
                         disabled={!formValue}
                         className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus:ring">
+                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none">
                         <SubmitIcon />
                     </button>
                 </form>
