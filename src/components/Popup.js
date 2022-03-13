@@ -54,7 +54,7 @@ function AboutInfo() {
                 Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
             </p><br />
             <p>
-                Built with Javascript using React and Firebase as a database.
+                Want to be verified on Globe Chat? Contact Brandon for a badge.
             </p><br />
             <p>Created by Brandon Vo</p>
         </div>

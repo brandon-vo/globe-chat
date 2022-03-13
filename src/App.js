@@ -46,9 +46,9 @@ function App() {
   }
 
   const randomAvatar = () => {
-    let randomNum = Math.floor(Math.random() * 10);
-    let max = 10;
+    let max = 20;
     let num = 1;
+    let randomNum = Math.floor(Math.random() * max);
     let avatarArr = Array(max).fill().map(() => avatars[num++])
     let avatar = avatarArr[randomNum];
     return avatar;
