@@ -5,6 +5,8 @@
   <br/>
 </p>
 
+![globechat](https://user-images.githubusercontent.com/76707560/164144262-7b8a3c8b-f9b1-4da4-acbb-51db5199cd83.jpg)
+
 ---
 
 Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
@@ -13,7 +15,7 @@ Built with Javascript using React.
 Utilized Firebase to store user data and messages.  
 Styled with Tailwind CSS. 
 
-Features include dark mode toggle, pop up menus, and sound effects.
+Features include theme toggles, pop up menus, sound effects, unique user profiles, and more.
 
 # Images 📷
 ![1](https://user-images.githubusercontent.com/76707560/134251204-dacef495-e7fd-4f06-88cc-ac86917ea088.png)
