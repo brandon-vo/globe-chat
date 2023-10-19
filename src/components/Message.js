@@ -50,7 +50,7 @@ const Message = ({
           className="rounded-full mr-5"
         />
       ) : null}
-      <div className="w-full flex flex-grow">
+      <div className="w-full flex">
         <div className="w-full">
           <div className="flex items-center mb-1">
             {displayName ? (
@@ -68,21 +68,23 @@ const Message = ({
             ) : null}
           </div>
           <p
-            className={
-              uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"
-            }
+            className={`break-all
+              ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}
+            `}
           >
             {text}
           </p>
         </div>
         {(isCurrentUserMessage || isBrandon) && (
           <div className="flex items-center">
-            <button
-              onClick={() => deleteMessage(messageID)}
-              className="ml-auto hidden group-hover:block"
-            >
-              <DeleteOutlineOutlined />
-            </button>
+            <div className="w-8">
+              <button
+                onClick={() => deleteMessage(messageID)}
+                className="ml-auto mr-3 hidden group-hover:block"
+              >
+                <DeleteOutlineOutlined />
+              </button>
+            </div>
           </div>
         )}
       </div>
