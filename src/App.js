@@ -4,12 +4,10 @@ import firebase from "firebase/app";
 import MainChat from "./pages/MainChat";
 import HomeScreen from "./pages/HomeScreen";
 import NavBarWrapper from "./components/NavBarWrapper";
-import NavBarSignedIn from "./components/NavBarSignedIn";
-import NavBarSignedOut from "./components/NavBarSignedOut";
-import {
-  ParticleBackground,
-  DarkParticleBackground,
-} from "./components/ParticleBackground";
+import NavBar from "./components/NavBar";
+import ParticleBackground from "./components/ParticleBackground";
+import ParticleConfig from "./config/particle-config";
+import DarkParticleConfig from "./config/dark-particle-config";
 import useSound from "use-sound";
 import avatars from "./assets/images/avatars/avatar";
 import sounds from "./assets/sounds/sounds";
@@ -134,14 +132,13 @@ function App() {
     <div className={`${darkMode ? "dark" : ""}`}>
       <div className="max-w-screen-7xl mx-auto min-h-screen dark:bg-gray-700">
         {user ? null : (
-          <>
-            <ParticleBackground />
-            <DarkParticleBackground />
-          </>
+          <ParticleBackground
+            config={darkMode ? DarkParticleConfig : ParticleConfig}
+          />
         )}
         <NavBarWrapper>
           {user ? (
-            <NavBarSignedIn
+            <NavBar
               aboutPopUp={aboutPopUp}
               musicClick={musicClick}
               darkMode={darkMode}
@@ -149,7 +146,7 @@ function App() {
               signOut={signOut}
             />
           ) : (
-            <NavBarSignedOut
+            <NavBar
               aboutPopUp={aboutPopUp}
               musicClick={musicClick}
               darkMode={darkMode}

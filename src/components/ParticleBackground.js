@@ -1,25 +1,11 @@
 import React from "react";
 import Particles from "react-tsparticles";
-import ParticleConfig from "../config/particle-config";
-import DarkParticleConfig from "../config/dark-particle-config";
 
 // Home screen particles for dark and light mode
-function ParticleBackground() {
+function ParticleBackground({ config }) {
   return (
-    <Particles
-      className="absolute w-full h-full"
-      options={ParticleConfig}
-    ></Particles>
+    <Particles className="absolute w-full h-full" options={config}></Particles>
   );
 }
 
-function DarkParticleBackground() {
-  return (
-    <Particles
-      className="absolute w-full h-full"
-      options={DarkParticleConfig}
-    ></Particles>
-  );
-}
-
-export { ParticleBackground, DarkParticleBackground };
+export default ParticleBackground;
