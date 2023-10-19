@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { useSpring, animated } from "react-spring";
-import { CloseIcon } from "./Icon.js";
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 function About(props) {
   // Popup
@@ -42,7 +42,7 @@ function About(props) {
             className="absolute top-5 right-5"
             onClick={() => props.setTrigger(false)}
           >
-            <CloseIcon />
+            <CloseOutlinedIcon />
           </button>
           {props.children}
         </div>
