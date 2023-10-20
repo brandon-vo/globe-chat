@@ -3,7 +3,6 @@ import React from "react";
 function NavBarButton({
   onClick,
   session = "",
-  darkMode,
   toggleDarkMode,
   signOut,
   signInWithGoogle,
