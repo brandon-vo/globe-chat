@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import firebase from "firebase/app";
 import Message from "./Message";
 import useSound from "use-sound";
+import Filter from "bad-words";
 import sounds from "../assets/sounds/sounds";
 import { BrowserView } from "react-device-detect";
 import { useSpring, animated } from "react-spring";
@@ -26,8 +27,12 @@ const Chat = ({ user = null, db = null }) => {
     maxWidth: isCompactLayout ? "560px" : "1024px",
   });
 
-  // User
   const { uid, displayName, photoURL } = user;
+
+  const profanityFilter = new Filter(); // Filter profanity out
+
+  const [lastMessageTime, setLastMessageTime] = useState(null);
+  const messageCooldown = 500; // 500 ms
 
   // Listen to all messages
   useEffect(() => {
@@ -47,8 +52,19 @@ const Chat = ({ user = null, db = null }) => {
     }
   }, [db]);
 
+  const onMessageCooldown = () => {
+    if (!lastMessageTime) return true;
+
+    const currentTime = new Date().getTime();
+    return currentTime - lastMessageTime >= messageCooldown;
+  };
+
   // Sending a message
   const sendMessage = async (e) => {
+    if (!onMessageCooldown()) {
+      return alert("Slow down!");
+    }
+
     // Check if message contains over 1000 characters
     if (formValue.length > 1000)
       return alert(
@@ -56,15 +72,18 @@ const Chat = ({ user = null, db = null }) => {
       );
 
     // Check if message is empty
-    if (!formValue.trim().length)
+    if (!formValue.trim().length) {
       return alert("You cannot send an empty message");
+    }
+
+    const sanitizedMessage = profanityFilter.clean(formValue);
 
     e.preventDefault();
 
     // Adding to messages collection
     if (db) {
       await db.collection("messages").add({
-        text: formValue,
+        text: sanitizedMessage,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         uid,
         displayName,
@@ -73,6 +92,7 @@ const Chat = ({ user = null, db = null }) => {
     }
     setFormValue(""); // Clear text after submit
     messageSound();
+    setLastMessageTime(new Date().getTime());
   };
 
   // Toggle layout
