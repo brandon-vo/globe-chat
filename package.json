@@ -1,6 +1,6 @@
 {
   "name": "globe-chat",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.2",
@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "bad-words": "^3.0.4",
     "date-fns": "^2.22.1",
     "dotenv": "^10.0.0",
     "firebase": "^8.6.8",
