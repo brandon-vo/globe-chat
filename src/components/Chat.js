@@ -61,6 +61,8 @@ const Chat = ({ user = null, db = null }) => {
 
   // Sending a message
   const sendMessage = async (e) => {
+    e.preventDefault();
+
     if (!onMessageCooldown()) {
       return alert("Slow down!");
     }
@@ -76,14 +78,12 @@ const Chat = ({ user = null, db = null }) => {
       return alert("You cannot send an empty message");
     }
 
-    const sanitizedMessage = profanityFilter.clean(formValue);
-
-    e.preventDefault();
+    const message = profanityFilter.clean(formValue); // Filter profanity out
 
     // Adding to messages collection
     if (db) {
       await db.collection("messages").add({
-        text: sanitizedMessage,
+        text: message,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         uid,
         displayName,
