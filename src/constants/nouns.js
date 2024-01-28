@@ -127,3 +127,5 @@ const nouns = [
   "Alligator",
   "Dinosaur",
 ];
+
+export default nouns;
