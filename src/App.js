@@ -31,21 +31,11 @@ function App() {
   const [clickSound] = useSound(sounds.click);
   const [switchSound] = useSound(sounds.switch);
   const [signOutSound] = useSound(sounds.signOut);
-  const [playbackRate, setPlaybackRate] = useState(0.6);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [musicSound, { stop }] = useSound(sounds.background, {
-    playbackRate,
-    volume: 0.4,
-  });
 
   // Setting user when signing in or out
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setUser(user);
-      } else {
-        setUser(null);
-      }
+      user ? setUser(user) : setUser(null);
     });
     return unsubscribe;
   }, []);
@@ -109,18 +99,6 @@ function App() {
     clickSound();
   };
 
-  // Clicking the music button
-  const musicClick = () => {
-    setPlaybackRate(playbackRate + 0.1);
-    setIsPlaying(!isPlaying);
-
-    isPlaying ? stop() : musicSound();
-
-    clickSound();
-
-    playbackRate > 4 && setPlaybackRate(0.5);
-  };
-
   // Toggle between dark mode and light mode
   const toggleDarkMode = () => {
     localStorage.setItem("dark", !darkMode);
@@ -140,7 +118,6 @@ function App() {
           {user ? (
             <NavBar
               aboutPopUp={aboutPopUp}
-              musicClick={musicClick}
               darkMode={darkMode}
               toggleDarkMode={toggleDarkMode}
               signOut={signOut}
@@ -148,7 +125,6 @@ function App() {
           ) : (
             <NavBar
               aboutPopUp={aboutPopUp}
-              musicClick={musicClick}
               darkMode={darkMode}
               toggleDarkMode={toggleDarkMode}
               signInWithGoogle={signInWithGoogle}

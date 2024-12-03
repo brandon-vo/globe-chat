@@ -2,13 +2,11 @@ import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import DarkModeIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeIcon from "@mui/icons-material/LightModeOutlined";
-import QueueMusicIcon from "@mui/icons-material/QueueMusicOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import NavBarButton from "./NavBarButton";
 
 function NavBarSignedIn({
   aboutPopUp,
-  musicClick,
   darkMode,
   toggleDarkMode,
   signInWithGoogle = null,
@@ -20,11 +18,6 @@ function NavBarSignedIn({
         onClick={aboutPopUp}
         darkMode={darkMode}
         text={<InfoOutlinedIcon />}
-      />
-      <NavBarButton
-        onClick={musicClick}
-        darkMode={darkMode}
-        text={<QueueMusicIcon />}
       />
       <NavBarButton
         onClick={toggleDarkMode}
