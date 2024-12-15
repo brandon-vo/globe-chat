@@ -1,7 +1,19 @@
 import Chat from "../components/Chat";
 import { About, AboutInfo } from "../components/Popup";
 
-function MainChat({ user, showAboutPopup, setShowAboutPopup, db }) {
+interface MainChatProps {
+  user: any; // TODO
+  showAboutPopup: boolean;
+  setShowAboutPopup: (value: boolean) => void;
+  db: any; // TODO
+}
+
+function MainChat({
+  user,
+  showAboutPopup,
+  setShowAboutPopup,
+  db,
+}: MainChatProps) {
   return (
     <>
       <p className="pt-28 pb-4 font-medium text-5xl tracking-wider text-black dark:text-white text-center">

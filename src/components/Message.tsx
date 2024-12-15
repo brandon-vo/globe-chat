@@ -4,7 +4,7 @@ import verifiedIcon from "../assets/images/verified.png";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 
 // Date formatting using the date-fns library
-const formatDate = (date) => {
+const formatDate = (date: Date) => {
   let formattedDate = "";
   if (date) {
     formattedDate = formatRelative(date, new Date()); // New formatted date
@@ -14,25 +14,37 @@ const formatDate = (date) => {
   return formattedDate;
 };
 
+interface MessageProps {
+  createdAt?: any;
+  text?: string;
+  displayName?: string;
+  photoURL?: string;
+  uid?: string;
+  verified?: boolean;
+  currentUserUid: string;
+  deleteMessage: (messageID: string) => void;
+  messageID: string;
+}
+
 // Message Format
 const Message = ({
-  createdAt = "",
-  text = "",
-  displayName = "",
-  photoURL = "",
-  uid = "",
+  createdAt,
+  text,
+  displayName,
+  photoURL,
+  uid,
   verified = false,
   currentUserUid,
   deleteMessage,
   messageID,
-}) => {
+}: MessageProps) => {
   const userID = [
     "3y8XlQiLCscOR3uQ7UwrSCHgF932",
     "GJTtKYbJG8M2ag3rJdVSpHCGWMz2",
     "5n86oOReOGQX4M8b1Lb3jivjKRT2",
     "S8FGjp8ZmmRTnGbW87aN3S3RaVT2",
   ];
-  if (userID.includes(uid)) {
+  if (uid && userID.includes(uid)) {
     verified = true;
   }
 

@@ -1,25 +1,22 @@
 import React, { useRef, useEffect } from "react";
-import { useSpring, animated } from "react-spring";
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-function About(props) {
+interface AboutProps {
+  trigger: boolean;
+  setTrigger: (value: boolean) => void;
+  children: React.ReactNode;
+}
+
+function About(props: AboutProps) {
   // Popup
-  const popupRef = useRef();
-
-  // Popup animation
-  const animation = useSpring({
-    config: {
-      duration: 50,
-    },
-    opacity: props.trigger ? 1 : 0,
-  });
+  const popupRef = useRef<HTMLDivElement>(null);
 
   // Exiting popup menu by clicking out of region or pressing escape key
   // eslint-disable-next-line
-  const closePopUp = (e) => {
+  const closePopUp = (e: any) => {
     if (popupRef.current === e.target) {
       props.setTrigger(false);
-    } else if (e.key === "Escape") {
+    } else if (e instanceof KeyboardEvent && e.key === "Escape") {
       props.setTrigger(false);
     }
   };
@@ -31,7 +28,7 @@ function About(props) {
   }, [closePopUp]);
 
   return props.trigger ? (
-    <animated.div style={animation}>
+    <div>
       <div
         className="fixed top-0 left-0 w-full h-screen flex justify-center items-center bg-black bg-opacity-50"
         ref={popupRef}
@@ -47,10 +44,11 @@ function About(props) {
           {props.children}
         </div>
       </div>
-    </animated.div>
+    </div>
   ) : null;
 }
 
+// TODO: Move this somewhere else...
 function AboutInfo() {
   return (
     <div className="m-2">
@@ -62,9 +60,11 @@ function AboutInfo() {
         anonymously to be able to chat with other users in a single chat room.
       </p>
       <br />
-      <p>Want to be verified on Globe Chat? Contact Brandon for a badge.</p>
-      <br />
-      <p>Created by Brandon Vo</p>
+      <p>
+        Want to be verified on Globe Chat?
+        <br />
+        Contact @brandonvo for a badge on Discord.
+      </p>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-const avatars = {
+const avatars: any = {
   1: require("./avatar-1.jpg").default,
   2: require("./avatar-2.jpg").default,
   3: require("./avatar-3.jpg").default,

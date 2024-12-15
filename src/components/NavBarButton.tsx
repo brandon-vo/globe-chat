@@ -1,5 +1,15 @@
 import React from "react";
 
+interface NavBarButtonProps {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  session?: string;
+  toggleDarkMode?: () => void;
+  signOut?: () => void;
+  signInWithGoogle?: () => void;
+  icon?: React.ReactNode;
+  text?: string | any; // TODO: Support icons without any
+}
+
 function NavBarButton({
   onClick,
   session = "",
@@ -8,7 +18,7 @@ function NavBarButton({
   signInWithGoogle,
   icon,
   text,
-}) {
+}: NavBarButtonProps) {
   const commonButtonStyle =
     "text-sm font-thin text-primary-500 hover:bg-gray-300 tracking-wide hover:bg-primary-500 bg-gray-200 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 sm:px-4 px-2 py-1 z-10 rounded transition-all shadow-inner";
 
@@ -22,15 +32,15 @@ function NavBarButton({
     session === "login"
       ? signInWithGoogle
       : session === "logout"
-      ? signOut
-      : toggleDarkMode;
+        ? signOut
+        : toggleDarkMode;
 
   const buttonStyle =
     session === "login"
       ? loginButtonStyle
       : session === "logout"
-      ? logoutButtonStyle
-      : commonButtonStyle;
+        ? logoutButtonStyle
+        : commonButtonStyle;
 
   return (
     <button className={buttonStyle} onClick={onClick || onClickHandler}>

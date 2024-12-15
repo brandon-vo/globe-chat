@@ -1,6 +1,7 @@
 import { auth, db } from "./firebase";
 import React, { useEffect, useState } from "react";
 import firebase from "firebase/app";
+// import { GoogleAuthProvider, signInWithPopup, signInAnonymously, updateProfile } from "firebase/auth";
 import MainChat from "./pages/MainChat";
 import HomeScreen from "./pages/HomeScreen";
 import NavBarWrapper from "./components/NavBarWrapper";
@@ -23,7 +24,7 @@ function App() {
   const [refreshAnonymous, setRefreshAnonymous] = useState(false); // To fix display name issue
 
   const [darkMode, setDarkMode] = useState(
-    localStorage.getItem("dark") === "false" ? false : true
+    localStorage.getItem("dark") === "false" ? false : true,
   );
 
   // Sounds
@@ -47,20 +48,34 @@ function App() {
     auth.useDeviceLanguage();
     auth.signInWithPopup(provider).catch((error) => console.error(error));
   };
+  // const signInWithGoogle = () => {
+  //   buttonSound();
+  //   const provider = new GoogleAuthProvider();
+  //   auth.useDeviceLanguage();
+  //   auth.signInWithPopup(provider).catch((error) => console.error(error));
+  //   // signInWithPopup(auth, provider).catch((error: any) => console.error(error));
+  // };
+
+  // const randomAvatar = () => {
+  //   let max = 50;
+  //   let num = 1;
+  //   let randomNum = Math.floor(Math.random() * max);
+  //   let avatarArr = Array(max)
+  //     .fill(0)
+  //     .map(() => avatars[num++]);
+  //   let avatar = avatarArr[randomNum];
+  //   return avatar;
+  // };
 
   const randomAvatar = () => {
-    let max = 50;
-    let num = 1;
-    let randomNum = Math.floor(Math.random() * max);
-    let avatarArr = Array(max)
-      .fill()
-      .map(() => avatars[num++]);
-    let avatar = avatarArr[randomNum];
+    const max = 50; // there are 50 avatars available
+    const randomNum = Math.floor(Math.random() * max + 1);
+    const avatar = avatars[randomNum];
     return avatar;
   };
 
   // Anonymous sign in
-  const signInAnonymously = () => {
+  const anonymousSignIn = () => {
     buttonSound();
     auth.useDeviceLanguage();
     auth
@@ -82,6 +97,25 @@ function App() {
           });
       })
       .catch((error) => console.error(error));
+    // auth.useDeviceLanguage();
+    // signInAnonymously(auth)
+    //   .then((userCredential) => {
+    //     const user = userCredential.user;
+    //     const displayName =
+    //       adjectives[Math.floor(Math.random() * adjectives.length)] +
+    //       " " +
+    //       nouns[Math.floor(Math.random() * nouns.length)];
+    //     if (!user) return;
+    //     updateProfile(user, {
+    //         displayName,
+    //         // photoURL: randomAvatar() || defaultAvatar,
+    //       })
+    //       .then(() => {
+    //         setUser(user);
+    //         setRefreshAnonymous(true);
+    //       });
+    //   })
+    //   .catch((error) => console.error(error));
   };
 
   // To fix the issue where Anonymous username doesnt show up immediately after signing in
@@ -101,7 +135,7 @@ function App() {
 
   // Toggle between dark mode and light mode
   const toggleDarkMode = () => {
-    localStorage.setItem("dark", !darkMode);
+    localStorage.setItem("dark", (!darkMode).toString());
     setDarkMode(!darkMode);
     switchSound();
   };
@@ -141,7 +175,7 @@ function App() {
         ) : (
           <HomeScreen
             signInWithGoogle={signInWithGoogle}
-            signInAnonymously={signInAnonymously}
+            anonymousSignIn={anonymousSignIn}
             showAboutPopup={showAboutPopup}
             setShowAboutPopup={setShowAboutPopup}
           />
