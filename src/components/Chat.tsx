@@ -1,56 +1,68 @@
-import React, { useState, useEffect } from "react";
-import firebase from "firebase/app";
+import { useState, useEffect } from "react";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+} from "firebase/firestore";
 import Message from "./Message";
 import useSound from "use-sound";
 import Filter from "bad-words";
-import sounds from "../assets/sounds/sounds";
-import { BrowserView } from "react-device-detect";
-import { useSpring, animated } from "react-spring";
+import sounds from "../helpers/getSounds";
 import { SubmitIcon } from "./Icon";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import MonitorIcon from "@mui/icons-material/Monitor";
 
-const Chat = ({ user = null, db = null }) => {
+interface ChatProps {
+  user?: any;
+  db?: any;
+}
+
+interface MessageType {
+  id: string;
+  text: string;
+  createdAt: any;
+  uid: string;
+  displayName: string;
+  photoURL: string;
+}
+
+const Chat = ({ user, db }: ChatProps) => {
   // Messages
-  const [messages, setMessages] = useState([]);
-  const [formValue, setFormValue] = useState("");
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const [formValue, setFormValue] = useState<string>("");
 
   // Sounds
   const [messageSound] = useSound(sounds.message, { volume: 0.4 });
-  const [clickSound] = useSound(sounds.click);
-
-  const [isCompactLayout, setIsCompactLayout] = useState(
-    localStorage.getItem("compact") === "true" ? true : false
-  );
-
-  const layoutWidthProps = useSpring({
-    maxWidth: isCompactLayout ? "560px" : "1024px",
-  });
 
   const { uid, displayName, photoURL } = user;
 
   const profanityFilter = new Filter(); // Filter profanity out
 
-  const [lastMessageTime, setLastMessageTime] = useState(null);
+  const [lastMessageTime, setLastMessageTime] = useState<number | null>(null);
   const messageCooldown = 500; // 500 ms
+
+  const firestore = getFirestore();
 
   // Listen to all messages
   useEffect(() => {
     if (db) {
-      const unsubscribe = db
-        .collection("messages")
-        .orderBy("createdAt", "desc")
-        .limit(75)
-        .onSnapshot((querySnapshot) => {
-          const data = querySnapshot.docs.map((doc) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessages(data);
-        });
+      const messagesRef = collection(firestore, "messages");
+      const q = query(messagesRef, orderBy("createdAt", "desc"), limit(75));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setMessages(data as MessageType[]);
+      });
       return unsubscribe;
     }
-  }, [db]);
+  }, [db, firestore]);
 
   const onMessageCooldown = () => {
     if (!lastMessageTime) return true;
@@ -60,9 +72,10 @@ const Chat = ({ user = null, db = null }) => {
   };
 
   // Sending a message
-  const sendMessage = async (e) => {
+  const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // TODO: make a custom alert component for all of these alerts
     if (!onMessageCooldown()) {
       return alert("Slow down!");
     }
@@ -70,7 +83,7 @@ const Chat = ({ user = null, db = null }) => {
     // Check if message contains over 1000 characters
     if (formValue.length > 1000)
       return alert(
-        "You cannot send a message that is longer than 1000 characters"
+        "You cannot send a message that is longer than 1000 characters",
       );
 
     // Check if message is empty
@@ -82,9 +95,10 @@ const Chat = ({ user = null, db = null }) => {
 
     // Adding to messages collection
     if (db) {
-      await db.collection("messages").add({
+      const messagesRef = collection(db, "messages");
+      await addDoc(messagesRef, {
         text: message,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: serverTimestamp(),
         uid,
         displayName,
         photoURL,
@@ -95,27 +109,17 @@ const Chat = ({ user = null, db = null }) => {
     setLastMessageTime(new Date().getTime());
   };
 
-  // Toggle layout
-  const changeLayout = () => {
-    if (isCompactLayout) {
-      localStorage.setItem("compact", false);
-    } else {
-      localStorage.setItem("compact", true);
-    }
-    setIsCompactLayout(!isCompactLayout);
-    clickSound();
-  };
-
-  const deleteMessage = async (messageId) => {
+  const deleteMessage = async (messageId: string) => {
     try {
-      await db.collection("messages").doc(messageId).delete();
+      const messageRef = doc(db, "messages", messageId); // Get a reference to the document
+      await deleteDoc(messageRef); // Delete the document
     } catch (error) {
       console.error("Error deleting message:", error);
     }
   };
 
   return (
-    <animated.div style={layoutWidthProps} className="py-4 mx-auto">
+    <div className="py-4 max-w-screen-lg mx-auto">
       <div className="mb-6 mx-4">
         <form
           onSubmit={sendMessage}
@@ -125,31 +129,23 @@ const Chat = ({ user = null, db = null }) => {
             type="text"
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
-            placeHolder="please be kind to others..."
+            placeholder="please be kind to others..."
             className="flex-1 bg-transparent outline-none"
           />
-          <BrowserView>
-            <button
-              type="button"
-              onClick={changeLayout}
-              className="dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 py-px focus-visible:ring focus:none hidden sm:block"
-            >
-              {isCompactLayout ? <PhoneAndroidIcon /> : <MonitorIcon />}
-            </button>
-          </BrowserView>
           {/* todo remove mt-0.5 after finding a good submit icon */}
           <button
             type="submit"
             disabled={!formValue}
             className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 mt-0.5 focus-visible:ring focus:none"
+                      dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3
+                      focus-visible:ring focus:none mt-0.5"
           >
             <SubmitIcon />
           </button>
         </form>
       </div>
       <ul>
-        {messages.map((message) => (
+        {messages.map((message: any) => (
           <li key={message.id}>
             <Message
               {...message}
@@ -160,7 +156,7 @@ const Chat = ({ user = null, db = null }) => {
           </li>
         ))}
       </ul>
-    </animated.div>
+    </div>
   );
 };
 

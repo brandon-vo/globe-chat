@@ -5,37 +5,39 @@ import LightModeIcon from "@mui/icons-material/LightModeOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import NavBarButton from "./NavBarButton";
 
+interface NavBarSignedInProps {
+  aboutPopUp: () => void;
+  darkMode: boolean;
+  toggleDarkMode: () => void;
+  signInWithGoogle?: () => void;
+  signOut?: () => void;
+}
+
 function NavBarSignedIn({
   aboutPopUp,
   darkMode,
   toggleDarkMode,
-  signInWithGoogle = null,
-  signOut = null,
-}) {
+  signInWithGoogle,
+  signOut,
+}: NavBarSignedInProps) {
   return (
     <ul className="flex items-center space-x-3">
-      <NavBarButton
-        onClick={aboutPopUp}
-        darkMode={darkMode}
-        text={<InfoOutlinedIcon />}
-      />
+      <NavBarButton onClick={aboutPopUp} icon={<InfoOutlinedIcon />} />
       <NavBarButton
         onClick={toggleDarkMode}
-        darkMode={darkMode}
         icon={darkMode ? <DarkModeIcon /> : <LightModeIcon />}
       />
-      {signInWithGoogle ? (
+      {signInWithGoogle && (
         <NavBarButton
           onClick={signInWithGoogle}
           session={"login"}
-          darkMode={darkMode}
           icon={<LoginOutlinedIcon />}
         />
-      ) : (
+      )}
+      {signOut && (
         <NavBarButton
           onClick={signOut}
           session={"logout"}
-          darkMode={darkMode}
           icon={<ExitToAppOutlinedIcon />}
         />
       )}

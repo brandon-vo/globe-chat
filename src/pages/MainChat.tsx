@@ -1,7 +1,20 @@
 import Chat from "../components/Chat";
-import { About, AboutInfo } from "../components/Popup";
+import Popup from "../components/Popup";
+import AboutInfo from "../components/AboutInfo";
 
-function MainChat({ user, showAboutPopup, setShowAboutPopup, db }) {
+interface MainChatProps {
+  user: any; // TODO
+  showAboutPopup: boolean;
+  setShowAboutPopup: (value: boolean) => void;
+  db: any; // TODO
+}
+
+function MainChat({
+  user,
+  showAboutPopup,
+  setShowAboutPopup,
+  db,
+}: MainChatProps) {
   return (
     <>
       <p className="pt-28 pb-4 font-medium text-5xl tracking-wider text-black dark:text-white text-center">
@@ -11,9 +24,9 @@ function MainChat({ user, showAboutPopup, setShowAboutPopup, db }) {
         welcome {user.displayName}
       </p>
       <p className="border-b border-gray-200 dark:border-gray-600 py-4 mb-4" />
-      <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
+      <Popup trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
         <AboutInfo />
-      </About>
+      </Popup>
       <Chat user={user} db={db} />
     </>
   );

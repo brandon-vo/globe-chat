@@ -1,7 +1,6 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-require("dotenv").config();
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -13,12 +12,11 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_APP_ID,
 };
 
-// Check if Firebase app is already initialized
-const app =
-  firebase.apps.length === 0
-    ? firebase.initializeApp(firebaseConfig)
-    : firebase.app();
+// Initialize Firebase app
+const app = initializeApp(firebaseConfig);
 
-const db = app.firestore();
-const auth = firebase.auth();
+// Initialize Firestore and Auth
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 export { db, auth };

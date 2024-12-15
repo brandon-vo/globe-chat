@@ -1,4 +1,4 @@
-const nouns = [
+const nouns: string[] = [
   "Dog",
   "Cat",
   "Tree",
