@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useCallback } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 interface AboutProps {
@@ -12,14 +12,16 @@ function About(props: AboutProps) {
   const popupRef = useRef<HTMLDivElement>(null);
 
   // Exiting popup menu by clicking out of region or pressing escape key
-  // eslint-disable-next-line
-  const closePopUp = (e: any) => {
-    if (popupRef.current === e.target) {
-      props.setTrigger(false);
-    } else if (e instanceof KeyboardEvent && e.key === "Escape") {
-      props.setTrigger(false);
-    }
-  };
+  const closePopUp = useCallback(
+    (e: any) => {
+      if (popupRef.current === e.target) {
+        props.setTrigger(false);
+      } else if (e instanceof KeyboardEvent && e.key === "Escape") {
+        props.setTrigger(false);
+      }
+    },
+    [props],
+  );
 
   // Reading escape key
   useEffect(() => {

@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
-// import { getFirestore, collection, addDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit, onSnapshot } from "firebase/firestore";
-import firebase from "firebase/app";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  serverTimestamp,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+} from "firebase/firestore";
 import Message from "./Message";
 import useSound from "use-sound";
 import Filter from "bad-words";
@@ -36,39 +46,23 @@ const Chat = ({ user, db }: ChatProps) => {
   const [lastMessageTime, setLastMessageTime] = useState<number | null>(null);
   const messageCooldown = 500; // 500 ms
 
-  // const firestore = getFirestore();
+  const firestore = getFirestore();
 
   // Listen to all messages
   useEffect(() => {
     if (db) {
-      const unsubscribe = db
-        .collection("messages")
-        .orderBy("createdAt", "desc")
-        .limit(75)
-        .onSnapshot((querySnapshot: any) => {
-          const data = querySnapshot.docs.map((doc: any) => ({
-            ...doc.data(),
-            id: doc.id,
-          }));
-          setMessages(data);
-        });
+      const messagesRef = collection(firestore, "messages");
+      const q = query(messagesRef, orderBy("createdAt", "desc"), limit(75));
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const data = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setMessages(data as MessageType[]);
+      });
       return unsubscribe;
     }
-  }, [db]);
-  // useEffect(() => {
-  //   if (db) {
-  //     const messagesRef = collection(firestore, "messages");
-  //     const q = query(messagesRef, orderBy("createdAt", "desc"), limit(75));
-  //     const unsubscribe = onSnapshot(q, (querySnapshot) => {
-  //       const data = querySnapshot.docs.map((doc) => ({
-  //         ...doc.data(),
-  //         id: doc.id,
-  //       }));
-  //       setMessages(data as MessageType[]);
-  //     });
-  //     return unsubscribe;
-  //   }
-  // }, [db, firestore]);
+  }, [db, firestore]);
 
   const onMessageCooldown = () => {
     if (!lastMessageTime) return true;
@@ -100,9 +94,10 @@ const Chat = ({ user, db }: ChatProps) => {
 
     // Adding to messages collection
     if (db) {
-      await db.collection("messages").add({
+      const messagesRef = collection(db, "messages");
+      await addDoc(messagesRef, {
         text: message,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        createdAt: serverTimestamp(),
         uid,
         displayName,
         photoURL,
@@ -111,19 +106,6 @@ const Chat = ({ user, db }: ChatProps) => {
     setFormValue(""); // Clear text after submit
     messageSound();
     setLastMessageTime(new Date().getTime());
-    // if (db) {
-    //   const messagesRef = collection(db, "messages");
-    //   await addDoc(messagesRef, {
-    //     text: message,
-    //     createdAt: serverTimestamp(),
-    //     uid,
-    //     displayName,
-    //     photoURL,
-    //   });
-    // }
-    // setFormValue(""); // Clear text after submit
-    // messageSound();
-    // setLastMessageTime(new Date().getTime());
   };
 
   let config = "py-4 max-w-screen-lg mx-auto";
@@ -133,9 +115,8 @@ const Chat = ({ user, db }: ChatProps) => {
 
   const deleteMessage = async (messageId: string) => {
     try {
-      await db.collection("messages").doc(messageId).delete();
-      // const messageRef = doc(db, "messages", messageId); // Get a reference to the document
-      // await deleteDoc(messageRef); // Delete the document
+      const messageRef = doc(db, "messages", messageId); // Get a reference to the document
+      await deleteDoc(messageRef); // Delete the document
     } catch (error) {
       console.error("Error deleting message:", error);
     }
