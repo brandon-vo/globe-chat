@@ -1,6 +1,5 @@
-import React from "react";
 import { formatRelative } from "date-fns";
-import verifiedIcon from "../assets/images/verified.png";
+import verifiedIcon from "../assets/images/verifiedBadge.png";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 
 // Date formatting using the date-fns library
@@ -38,13 +37,13 @@ const Message = ({
   deleteMessage,
   messageID,
 }: MessageProps) => {
-  const userID = [
+  const verifiedUserIDs: string[] = [
     "3y8XlQiLCscOR3uQ7UwrSCHgF932",
     "GJTtKYbJG8M2ag3rJdVSpHCGWMz2",
     "5n86oOReOGQX4M8b1Lb3jivjKRT2",
     "S8FGjp8ZmmRTnGbW87aN3S3RaVT2",
   ];
-  if (uid && userID.includes(uid)) {
+  if (uid && verifiedUserIDs.includes(uid)) {
     verified = true;
   }
 
@@ -80,9 +79,7 @@ const Message = ({
             ) : null}
           </div>
           <p
-            className={`break-all
-              ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}
-            `}
+            className={`break-all ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}`}
           >
             {text}
           </p>

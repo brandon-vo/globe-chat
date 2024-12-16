@@ -14,7 +14,7 @@ import {
 import Message from "./Message";
 import useSound from "use-sound";
 import Filter from "bad-words";
-import sounds from "../assets/sounds/sounds";
+import sounds from "../helpers/getSounds";
 import { SubmitIcon } from "./Icon";
 
 interface ChatProps {
@@ -34,7 +34,7 @@ interface MessageType {
 const Chat = ({ user, db }: ChatProps) => {
   // Messages
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [formValue, setFormValue] = useState("");
+  const [formValue, setFormValue] = useState<string>("");
 
   // Sounds
   const [messageSound] = useSound(sounds.message, { volume: 0.4 });
@@ -75,6 +75,7 @@ const Chat = ({ user, db }: ChatProps) => {
   const sendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // TODO: make a custom alert component for all of these alerts
     if (!onMessageCooldown()) {
       return alert("Slow down!");
     }
@@ -108,11 +109,6 @@ const Chat = ({ user, db }: ChatProps) => {
     setLastMessageTime(new Date().getTime());
   };
 
-  let config = "py-4 max-w-screen-lg mx-auto";
-  if (localStorage.getItem("size") === "false") {
-    config = "py-4 max-w-screen-sm mx-auto";
-  }
-
   const deleteMessage = async (messageId: string) => {
     try {
       const messageRef = doc(db, "messages", messageId); // Get a reference to the document
@@ -123,7 +119,7 @@ const Chat = ({ user, db }: ChatProps) => {
   };
 
   return (
-    <div className={config}>
+    <div className="py-4 max-w-screen-lg mx-auto">
       <div className="mb-6 mx-4">
         <form
           onSubmit={sendMessage}
@@ -141,7 +137,8 @@ const Chat = ({ user, db }: ChatProps) => {
             type="submit"
             disabled={!formValue}
             className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                             dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 mt-0.5 focus-visible:ring focus:none"
+                      dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3
+                      focus-visible:ring focus:none mt-0.5"
           >
             <SubmitIcon />
           </button>

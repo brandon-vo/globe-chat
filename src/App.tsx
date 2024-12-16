@@ -1,7 +1,11 @@
 import { auth, db } from "./firebase";
-import React, { useEffect, useState } from "react";
-// import firebase from "firebase/app";
-import { GoogleAuthProvider, signInWithPopup, signInAnonymously, updateProfile } from "firebase/auth";
+import { useEffect, useState } from "react";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInAnonymously,
+  updateProfile,
+} from "firebase/auth";
 import MainChat from "./pages/MainChat";
 import HomeScreen from "./pages/HomeScreen";
 import NavBarWrapper from "./components/NavBarWrapper";
@@ -10,8 +14,8 @@ import ParticleBackground from "./components/ParticleBackground";
 import ParticleConfig from "./config/particle-config";
 import DarkParticleConfig from "./config/dark-particle-config";
 import useSound from "use-sound";
-import avatars from "./assets/images/avatars/avatar";
-import sounds from "./assets/sounds/sounds";
+import avatars from "./helpers/getAvatar";
+import sounds from "./helpers/getSounds";
 import adjectives from "./constants/adjectives";
 import nouns from "./constants/nouns";
 import defaultAvatar from "./assets/images/avatars/avatar-1.jpg";
@@ -20,10 +24,10 @@ import "./App.css";
 
 function App() {
   const [user, setUser] = useState(() => auth.currentUser); // Setting user
-  const [showAboutPopup, setShowAboutPopup] = useState(false); // About pop up initially disabled
-  const [refreshAnonymous, setRefreshAnonymous] = useState(false); // To fix display name issue
+  const [showAboutPopup, setShowAboutPopup] = useState<boolean>(false); // About pop up initially disabled
+  const [refreshAnonymous, setRefreshAnonymous] = useState<boolean>(false); // To fix display name issue
 
-  const [darkMode, setDarkMode] = useState(
+  const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("dark") === "false" ? false : true,
   );
 
@@ -69,13 +73,12 @@ function App() {
           nouns[Math.floor(Math.random() * nouns.length)];
         if (!user) return;
         updateProfile(user, {
-            displayName,
-            photoURL: randomAvatar() || defaultAvatar,
-          })
-          .then(() => {
-            setUser(user);
-            setRefreshAnonymous(true);
-          });
+          displayName,
+          photoURL: randomAvatar() || defaultAvatar,
+        }).then(() => {
+          setUser(user);
+          setRefreshAnonymous(true);
+        });
       })
       .catch((error) => console.error(error));
   };

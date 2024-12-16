@@ -1,4 +1,5 @@
-import { About, AboutInfo } from "../components/Popup";
+import Popup from "../components/Popup";
+import AboutInfo from "../components/AboutInfo";
 import { GoogleIcon } from "../components/Icon";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
@@ -44,9 +45,9 @@ function HomeScreen({
           <p className="pt-6 font-light text-base tracking-widest text-gray-500 dark:text-gray-200 text-center">
             created by brandon vo
           </p>
-          <About trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
+          <Popup trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
             <AboutInfo />
-          </About>
+          </Popup>
         </div>
       </div>
     </div>

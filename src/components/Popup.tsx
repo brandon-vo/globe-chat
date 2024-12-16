@@ -7,7 +7,7 @@ interface AboutProps {
   children: React.ReactNode;
 }
 
-function About(props: AboutProps) {
+function Popup(props: AboutProps) {
   // Popup
   const popupRef = useRef<HTMLDivElement>(null);
 
@@ -50,25 +50,4 @@ function About(props: AboutProps) {
   ) : null;
 }
 
-// TODO: Move this somewhere else...
-function AboutInfo() {
-  return (
-    <div className="m-2">
-      <h3 className="font-bold text-2xl mb-4">About</h3>
-      <p>
-        {" "}
-        Globe Chat is a real-time web app used to chat with anybody around the
-        world. Users will sign in with their Google accounts or log in
-        anonymously to be able to chat with other users in a single chat room.
-      </p>
-      <br />
-      <p>
-        Want to be verified on Globe Chat?
-        <br />
-        Contact @brandonvo for a badge on Discord.
-      </p>
-    </div>
-  );
-}
-
-export { About, AboutInfo };
+export default Popup;

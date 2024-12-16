@@ -22,28 +22,22 @@ function NavBarSignedIn({
 }: NavBarSignedInProps) {
   return (
     <ul className="flex items-center space-x-3">
-      <NavBarButton
-        onClick={aboutPopUp}
-        // darkMode={darkMode} TODO i forgot what this is
-        text={<InfoOutlinedIcon />}
-      />
+      <NavBarButton onClick={aboutPopUp} icon={<InfoOutlinedIcon />} />
       <NavBarButton
         onClick={toggleDarkMode}
-        // darkMode={darkMode}
         icon={darkMode ? <DarkModeIcon /> : <LightModeIcon />}
       />
-      {signInWithGoogle ? (
+      {signInWithGoogle && (
         <NavBarButton
           onClick={signInWithGoogle}
           session={"login"}
-          // darkMode={darkMode}
           icon={<LoginOutlinedIcon />}
         />
-      ) : (
+      )}
+      {signOut && (
         <NavBarButton
           onClick={signOut}
           session={"logout"}
-          // darkMode={darkMode}
           icon={<ExitToAppOutlinedIcon />}
         />
       )}

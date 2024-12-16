@@ -12,7 +12,6 @@
     "@testing-library/user-event": "^12.1.10",
     "bad-words": "^3.0.4",
     "date-fns": "^2.22.1",
-    "dotenv": "^10.0.0",
     "firebase": "^9.23.0",
     "postcss": "^7.0.39",
     "pre-commit": "^1.2.2",
