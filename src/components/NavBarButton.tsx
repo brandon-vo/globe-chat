@@ -3,18 +3,12 @@ import React from "react";
 interface NavBarButtonProps {
   onClick: () => void;
   session?: string;
-  toggleDarkMode?: () => void;
-  signOut?: () => void;
-  signInWithGoogle?: () => void;
   icon: React.ReactNode;
 }
 
 function NavBarButton({
   onClick,
-  session = "",
-  toggleDarkMode,
-  signOut,
-  signInWithGoogle,
+  session = "", // For styling the login and logout buttons with gradient colors
   icon,
 }: NavBarButtonProps) {
   const commonButtonStyle =
@@ -32,13 +26,6 @@ function NavBarButton({
     "bg-gradient-to-r from-red-500 to-red-200 dark:text-white sm:px-4 px-2 py-1 z-10 rounded " +
     "transition-all shadow-inner";
 
-  const onClickHandler =
-    session === "login"
-      ? signInWithGoogle
-      : session === "logout"
-        ? signOut
-        : toggleDarkMode;
-
   const buttonStyle =
     session === "login"
       ? loginButtonStyle
@@ -47,8 +34,8 @@ function NavBarButton({
         : commonButtonStyle;
 
   return (
-    <button className={buttonStyle} onClick={onClick || onClickHandler}>
-      {icon || (toggleDarkMode && icon)}
+    <button className={buttonStyle} onClick={onClick}>
+      {icon}
     </button>
   );
 }

@@ -1,5 +1,6 @@
 import Popup from "../components/Popup";
-import AboutInfo from "../components/AboutInfo";
+import AboutPopup from "../components/AboutPopup";
+import SettingsPopup from "../components/SettingsPopup";
 import { GoogleIcon } from "../components/Icon";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 
@@ -7,14 +8,18 @@ interface HomeScreenProps {
   signInWithGoogle: () => void;
   anonymousSignIn: () => void;
   showAboutPopup: boolean;
+  showSettingsPopup: boolean;
   setShowAboutPopup: (value: boolean) => void;
+  setShowSettingsPopup: (value: boolean) => void;
 }
 
 function HomeScreen({
   signInWithGoogle,
   anonymousSignIn,
   showAboutPopup,
+  showSettingsPopup,
   setShowAboutPopup,
+  setShowSettingsPopup,
 }: HomeScreenProps) {
   return (
     <div className="flex h-screen">
@@ -46,7 +51,10 @@ function HomeScreen({
             created by brandon vo
           </p>
           <Popup trigger={showAboutPopup} setTrigger={setShowAboutPopup}>
-            <AboutInfo />
+            <AboutPopup />
+          </Popup>
+          <Popup trigger={showSettingsPopup} setTrigger={setShowSettingsPopup}>
+            <SettingsPopup />
           </Popup>
         </div>
       </div>

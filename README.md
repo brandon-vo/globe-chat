@@ -11,8 +11,8 @@
 
 Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
 
-Built with TypeScript and React.  
-Utilized Firebase to store user data and messages.  
+Built with React, TypeScript, and Zustand.  
+Used Firebase to store user data and messages.  
 Styled with Tailwind CSS.
 
 Features include theme toggles, pop up menus, sound effects, unique user profiles, and more.

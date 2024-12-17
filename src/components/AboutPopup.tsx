@@ -1,4 +1,4 @@
-function AboutInfo() {
+function AboutPopup() {
   return (
     <div className="m-2">
       <h3 className="font-bold text-2xl mb-4">About</h3>
@@ -17,4 +17,4 @@ function AboutInfo() {
   );
 }
 
-export default AboutInfo;
+export default AboutPopup;

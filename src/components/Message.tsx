@@ -3,6 +3,7 @@ import useSound from "use-sound";
 import sounds from "../helpers/getSounds";
 import verifiedIcon from "../assets/images/verifiedBadge.png";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
+import { useVolumeStore } from "../store";
 
 // Date formatting using the date-fns library
 const formatDate = (date: Date) => {
@@ -42,8 +43,10 @@ const Message = ({
   confirmDelete,
   messageID,
 }: MessageProps) => {
-  const [deleteSound] = useSound(sounds.button2, { volume: 0.5 });
-  const [clickSound] = useSound(sounds.button3, { volume: 0.5 });
+  const { isMuted } = useVolumeStore();
+
+  const [deleteSound] = useSound(sounds.button2, { volume: isMuted ? 0 : 0.5 });
+  const [clickSound] = useSound(sounds.button3, { volume: isMuted ? 0 : 0.5 });
 
   const verifiedUserIDs: string[] = [
     "3y8XlQiLCscOR3uQ7UwrSCHgF932",
