@@ -1,19 +1,25 @@
 import React, { useRef, useEffect, useCallback } from "react";
+import sounds from "../helpers/getSounds";
+import useSound from "use-sound";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 interface AboutProps {
   trigger: boolean;
   setTrigger: (value: boolean) => void;
   children: React.ReactNode;
+  confirmMode?: boolean;
+  onConfirm?: () => void;
 }
 
 function Popup(props: AboutProps) {
   // Popup
   const popupRef = useRef<HTMLDivElement>(null);
 
+  const [clickSound] = useSound(sounds.button2, { volume: 0.5 });
+
   // Exiting popup menu by clicking out of region or pressing escape key
   const closePopUp = useCallback(
-    (e: any) => {
+    (e: React.MouseEvent<HTMLDivElement> | KeyboardEvent) => {
       if (popupRef.current === e.target) {
         props.setTrigger(false);
       } else if (e instanceof KeyboardEvent && e.key === "Escape") {
@@ -37,13 +43,38 @@ function Popup(props: AboutProps) {
         onClick={closePopUp}
       >
         <div className="p-6 relative text-black bg-white dark:text-white dark:bg-gray-700 max-w-xl rounded-2xl">
-          <button
-            className="absolute top-5 right-5"
-            onClick={() => props.setTrigger(false)}
-          >
-            <CloseOutlinedIcon />
-          </button>
-          {props.children}
+          {props.confirmMode ? (
+            <div className="flex flex-col space-y-4">
+              {props.children}
+              <div className="flex justify-center gap-6">
+                <button
+                  onClick={() => props.setTrigger(false)}
+                  className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    clickSound();
+                    if (props.onConfirm) props.onConfirm();
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <button
+                className="absolute top-5 right-5"
+                onClick={() => props.setTrigger(false)}
+              >
+                <CloseOutlinedIcon />
+              </button>
+              {props.children}
+            </>
+          )}
         </div>
       </div>
     </div>

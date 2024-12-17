@@ -16,6 +16,7 @@ import useSound from "use-sound";
 import Filter from "bad-words";
 import sounds from "../helpers/getSounds";
 import { SubmitIcon } from "./Icon";
+import Popup from "./Popup";
 
 interface ChatProps {
   user?: any;
@@ -35,9 +36,11 @@ const Chat = ({ user, db }: ChatProps) => {
   // Messages
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [formValue, setFormValue] = useState<string>("");
+  const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
+  const [messageIDToDelete, setMessageIDToDelete] = useState<string>("");
 
   // Sounds
-  const [messageSound] = useSound(sounds.message, { volume: 0.4 });
+  const [messageSound] = useSound(sounds.message, { volume: 0.4 }); // TODO: custom volume control
 
   const { uid, displayName, photoURL } = user;
 
@@ -109,12 +112,33 @@ const Chat = ({ user, db }: ChatProps) => {
     setLastMessageTime(new Date().getTime());
   };
 
-  const deleteMessage = async (messageId: string) => {
+  const confirmDelete = async (
+    event: React.MouseEvent<HTMLButtonElement>,
+    messageId: string,
+  ) => {
+    if (event.shiftKey) {
+      // Direct deletion without confirmation
+      try {
+        const messageRef = doc(db, "messages", messageId);
+        await deleteDoc(messageRef);
+      } catch (error) {
+        console.error("Error deleting message:", error);
+      }
+    } else {
+      setShowConfirmDelete(true);
+      setMessageIDToDelete(messageId);
+    }
+  };
+
+  const deleteMessage = async () => {
     try {
-      const messageRef = doc(db, "messages", messageId); // Get a reference to the document
+      const messageRef = doc(db, "messages", messageIDToDelete); // Get a reference to the document
       await deleteDoc(messageRef); // Delete the document
     } catch (error) {
       console.error("Error deleting message:", error);
+    } finally {
+      setShowConfirmDelete(false);
+      setMessageIDToDelete("");
     }
   };
 
@@ -137,8 +161,7 @@ const Chat = ({ user, db }: ChatProps) => {
             type="submit"
             disabled={!formValue}
             className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-                      dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3
-                      focus-visible:ring focus:none mt-0.5"
+              dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 focus-visible:ring focus:none mt-0.5"
           >
             <SubmitIcon />
           </button>
@@ -150,12 +173,29 @@ const Chat = ({ user, db }: ChatProps) => {
             <Message
               {...message}
               currentUserUid={uid}
-              deleteMessage={deleteMessage}
               messageID={message.id}
+              confirmDelete={(e: React.MouseEvent<HTMLButtonElement>) =>
+                confirmDelete(e, message.id)
+              }
             />
           </li>
         ))}
       </ul>
+
+      <Popup
+        trigger={showConfirmDelete}
+        setTrigger={setShowConfirmDelete}
+        confirmMode={true}
+        onConfirm={deleteMessage}
+      >
+        <div className="flex flex-col items-center">
+          <p>Are you sure you want to delete this message?</p>
+          <p className="text-sm text-gray-300 gap-1">
+            <strong>TIP: </strong> Hold <kbd>Shift</kbd> to delete a message
+            without confirmation
+          </p>
+        </div>
+      </Popup>
     </div>
   );
 };
