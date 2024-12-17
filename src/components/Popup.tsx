@@ -2,8 +2,10 @@ import React, { useRef, useEffect, useCallback } from "react";
 import sounds from "../helpers/getSounds";
 import useSound from "use-sound";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { useVolumeStore } from "../store";
 
 interface AboutProps {
+  className?: string;
   trigger: boolean;
   setTrigger: (value: boolean) => void;
   children: React.ReactNode;
@@ -11,22 +13,31 @@ interface AboutProps {
   onConfirm?: () => void;
 }
 
-function Popup(props: AboutProps) {
+function Popup({
+  className = "",
+  trigger,
+  setTrigger,
+  children,
+  confirmMode,
+  onConfirm,
+}: AboutProps) {
   // Popup
   const popupRef = useRef<HTMLDivElement>(null);
 
-  const [clickSound] = useSound(sounds.button2, { volume: 0.5 });
+  const { isMuted } = useVolumeStore();
+
+  const [clickSound] = useSound(sounds.button2, { volume: isMuted ? 0 : 0.5 });
 
   // Exiting popup menu by clicking out of region or pressing escape key
   const closePopUp = useCallback(
     (e: React.MouseEvent<HTMLDivElement> | KeyboardEvent) => {
       if (popupRef.current === e.target) {
-        props.setTrigger(false);
+        setTrigger(false);
       } else if (e instanceof KeyboardEvent && e.key === "Escape") {
-        props.setTrigger(false);
+        setTrigger(false);
       }
     },
-    [props],
+    [setTrigger],
   );
 
   // Reading escape key
@@ -35,49 +46,50 @@ function Popup(props: AboutProps) {
     return () => document.removeEventListener("keydown", closePopUp);
   }, [closePopUp]);
 
-  return props.trigger ? (
-    <div>
+  return trigger ? (
+    <>
+      {/* Backdrop */}
       <div
-        className="fixed top-0 left-0 w-full h-screen flex justify-center items-center bg-black bg-opacity-50"
+        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40"
         ref={popupRef}
         onClick={closePopUp}
-      >
-        <div className="p-6 relative text-black bg-white dark:text-white dark:bg-gray-700 max-w-xl rounded-2xl">
-          {props.confirmMode ? (
-            <div className="flex flex-col space-y-4">
-              {props.children}
-              <div className="flex justify-center gap-6">
-                <button
-                  onClick={() => props.setTrigger(false)}
-                  className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={() => {
-                    clickSound();
-                    if (props.onConfirm) props.onConfirm();
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ) : (
-            <>
+      />
+      {/* Popup Window */}
+      <div className="w-4/5 md:w-3/4 lg:w-1/3 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl z-50">
+        {confirmMode ? (
+          <div className="flex flex-col space-y-4">
+            {children}
+            <div className="flex justify-center gap-6">
               <button
-                className="absolute top-5 right-5"
-                onClick={() => props.setTrigger(false)}
+                onClick={() => setTrigger(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded"
               >
-                <CloseOutlinedIcon />
+                Cancel
               </button>
-              {props.children}
-            </>
-          )}
-        </div>
+              <button
+                onClick={() => {
+                  clickSound();
+                  if (onConfirm) onConfirm();
+                }}
+                className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <button
+              className="absolute top-5 right-5"
+              onClick={() => setTrigger(false)}
+            >
+              <CloseOutlinedIcon />
+            </button>
+            {children}
+          </>
+        )}
       </div>
-    </div>
+    </>
   ) : null;
 }
 

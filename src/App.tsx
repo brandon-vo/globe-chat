@@ -6,6 +6,7 @@ import {
   signInAnonymously,
   updateProfile,
 } from "firebase/auth";
+import { useDarkModeStore, useUserStore, useVolumeStore } from "./store";
 import MainChat from "./pages/MainChat";
 import HomeScreen from "./pages/HomeScreen";
 import NavBarWrapper from "./components/NavBarWrapper";
@@ -23,27 +24,37 @@ import defaultAvatar from "./assets/images/avatars/avatar-1.jpg";
 import "./App.css";
 
 function App() {
-  const [user, setUser] = useState(() => auth.currentUser); // Setting user
-  const [showAboutPopup, setShowAboutPopup] = useState<boolean>(false); // About pop up initially disabled
+  const { user, setUser } = useUserStore();
+  const { isDarkMode } = useDarkModeStore();
+  const { isMuted } = useVolumeStore();
+  const [showAboutPopup, setShowAboutPopup] = useState<boolean>(false);
+  const [showSettingsPopup, setShowSettingsPopup] = useState<boolean>(false);
   const [refreshAnonymous, setRefreshAnonymous] = useState<boolean>(false); // To fix display name issue
 
-  const [darkMode, setDarkMode] = useState<boolean>(
-    localStorage.getItem("dark") === "false" ? false : true,
-  );
-
   // Sounds
-  const [buttonSound] = useSound(sounds.button);
-  const [clickSound] = useSound(sounds.click);
-  const [switchSound] = useSound(sounds.switch);
-  const [signOutSound] = useSound(sounds.signOut);
+  const [buttonSound] = useSound(sounds.button, { volume: isMuted ? 0 : 1 });
+  const [clickSound] = useSound(sounds.click, { volume: isMuted ? 0 : 1 });
+  const [signOutSound] = useSound(sounds.signOut, {
+    volume: isMuted ? 0 : 0.8,
+  });
 
   // Setting user when signing in or out
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
-      user ? setUser(user) : setUser(null);
+      if (!user) {
+        setUser(null);
+        return;
+      }
+      const firebaseUser = {
+        uid: user.uid,
+        displayName: user.displayName || "Broken",
+        photoURL: user.photoURL || "",
+        isAnonymous: user.isAnonymous,
+      };
+      setUser(firebaseUser);
     });
     return unsubscribe;
-  }, []);
+  }, [setUser]);
 
   const signInWithGoogle = () => {
     buttonSound();
@@ -59,6 +70,7 @@ function App() {
     return avatar;
   };
 
+  // TODO: Do something where users on the same device sign into the same anonymous account as before if within a certain time frame
   const anonymousSignIn = () => {
     buttonSound();
     auth.useDeviceLanguage();
@@ -74,7 +86,13 @@ function App() {
           displayName,
           photoURL: randomAvatar() || defaultAvatar,
         }).then(() => {
-          setUser(user);
+          const firebaseUser = {
+            uid: user.uid,
+            displayName: user.displayName || "Broken",
+            photoURL: user.photoURL || "",
+            isAnonymous: user.isAnonymous,
+          };
+          setUser(firebaseUser);
           setRefreshAnonymous(true);
         });
       })
@@ -96,51 +114,51 @@ function App() {
     clickSound();
   };
 
-  // Toggle between dark mode and light mode
-  const toggleDarkMode = () => {
-    localStorage.setItem("dark", (!darkMode).toString());
-    setDarkMode(!darkMode);
-    switchSound();
+  // Settings pop up
+  const settingsPopUp = () => {
+    setShowSettingsPopup((prev) => !prev);
+    clickSound();
   };
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
+    <div className={`${isDarkMode ? "dark" : ""}`}>
       <div className="max-w-screen-7xl mx-auto min-h-screen dark:bg-gray-700">
         {user ? null : (
           <ParticleBackground
-            config={darkMode ? DarkParticleConfig : ParticleConfig}
+            config={isDarkMode ? ParticleConfig : DarkParticleConfig}
           />
         )}
         <NavBarWrapper>
           {user ? (
             <NavBar
               aboutPopUp={aboutPopUp}
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
+              settingsPopUp={settingsPopUp}
               signOut={signOut}
             />
           ) : (
             <NavBar
               aboutPopUp={aboutPopUp}
-              darkMode={darkMode}
-              toggleDarkMode={toggleDarkMode}
+              settingsPopUp={settingsPopUp}
               signInWithGoogle={signInWithGoogle}
             />
           )}
         </NavBarWrapper>
         {user ? (
           <MainChat
-            user={user}
-            showAboutPopup={showAboutPopup}
-            setShowAboutPopup={setShowAboutPopup}
             db={db}
+            showAboutPopup={showAboutPopup}
+            showSettingsPopup={showSettingsPopup}
+            setShowAboutPopup={setShowAboutPopup}
+            setShowSettingsPopup={setShowSettingsPopup}
           />
         ) : (
           <HomeScreen
             signInWithGoogle={signInWithGoogle}
             anonymousSignIn={anonymousSignIn}
             showAboutPopup={showAboutPopup}
+            showSettingsPopup={showSettingsPopup}
             setShowAboutPopup={setShowAboutPopup}
+            setShowSettingsPopup={setShowSettingsPopup}
           />
         )}
       </div>

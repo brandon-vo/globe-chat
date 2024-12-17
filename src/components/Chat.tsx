@@ -15,8 +15,9 @@ import Message from "./Message";
 import useSound from "use-sound";
 import Filter from "bad-words";
 import sounds from "../helpers/getSounds";
-import { SubmitIcon } from "./Icon";
 import Popup from "./Popup";
+import { useUserStore, useVolumeStore } from "../store";
+import { SubmitIcon } from "./Icon";
 
 interface ChatProps {
   user?: any;
@@ -32,17 +33,20 @@ interface MessageType {
   photoURL: string;
 }
 
-const Chat = ({ user, db }: ChatProps) => {
+const Chat = ({ db }: ChatProps) => {
   // Messages
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [formValue, setFormValue] = useState<string>("");
   const [showConfirmDelete, setShowConfirmDelete] = useState<boolean>(false);
   const [messageIDToDelete, setMessageIDToDelete] = useState<string>("");
+  const { isMuted } = useVolumeStore();
 
   // Sounds
-  const [messageSound] = useSound(sounds.message, { volume: 0.4 }); // TODO: custom volume control
+  const [messageSound] = useSound(sounds.message, {
+    volume: isMuted ? 0 : 0.4,
+  });
 
-  const { uid, displayName, photoURL } = user;
+  const { user } = useUserStore();
 
   const profanityFilter = new Filter(); // Filter profanity out
 
@@ -97,14 +101,14 @@ const Chat = ({ user, db }: ChatProps) => {
     const message = profanityFilter.clean(formValue); // Filter profanity out
 
     // Adding to messages collection
-    if (db) {
+    if (db && user) {
       const messagesRef = collection(db, "messages");
       await addDoc(messagesRef, {
         text: message,
         createdAt: serverTimestamp(),
-        uid,
-        displayName,
-        photoURL,
+        uid: user.uid,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
       });
     }
     setFormValue(""); // Clear text after submit
@@ -142,6 +146,14 @@ const Chat = ({ user, db }: ChatProps) => {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="text-center">
+        <p>You are not logged in :|</p>
+      </div>
+    );
+  }
+
   return (
     <div className="py-4 max-w-screen-lg mx-auto">
       <div className="mb-6 mx-4">
@@ -172,7 +184,7 @@ const Chat = ({ user, db }: ChatProps) => {
           <li key={message.id}>
             <Message
               {...message}
-              currentUserUid={uid}
+              currentUserUid={user.uid}
               messageID={message.id}
               confirmDelete={(e: React.MouseEvent<HTMLButtonElement>) =>
                 confirmDelete(e, message.id)

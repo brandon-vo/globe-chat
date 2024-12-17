@@ -20,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-tsparticles": "^1.42.1",
     "use-sound": "^4.0.0",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "zustand": "^5.0.2"
   },
   "scripts": {
     "start": "craco --openssl-legacy-provider start",
