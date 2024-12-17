@@ -1,4 +1,6 @@
 import { formatRelative } from "date-fns";
+import useSound from "use-sound";
+import sounds from "../helpers/getSounds";
 import verifiedIcon from "../assets/images/verifiedBadge.png";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 
@@ -21,7 +23,10 @@ interface MessageProps {
   uid?: string;
   verified?: boolean;
   currentUserUid: string;
-  deleteMessage: (messageID: string) => void;
+  confirmDelete: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    messageID: string,
+  ) => void;
   messageID: string;
 }
 
@@ -34,9 +39,12 @@ const Message = ({
   uid,
   verified = false,
   currentUserUid,
-  deleteMessage,
+  confirmDelete,
   messageID,
 }: MessageProps) => {
+  const [deleteSound] = useSound(sounds.button2, { volume: 0.5 });
+  const [clickSound] = useSound(sounds.button3, { volume: 0.5 });
+
   const verifiedUserIDs: string[] = [
     "3y8XlQiLCscOR3uQ7UwrSCHgF932",
     "GJTtKYbJG8M2ag3rJdVSpHCGWMz2",
@@ -88,7 +96,10 @@ const Message = ({
           <div className="flex items-center">
             <div className="w-8">
               <button
-                onClick={() => deleteMessage(messageID)}
+                onClick={(e) => {
+                  e.shiftKey ? deleteSound() : clickSound();
+                  confirmDelete(e, messageID);
+                }}
                 className="ml-auto mr-3 hidden group-hover:block"
               >
                 <DeleteOutlineOutlined />

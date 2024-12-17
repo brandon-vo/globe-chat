@@ -45,7 +45,6 @@ function App() {
     return unsubscribe;
   }, []);
 
-  // Google sign in
   const signInWithGoogle = () => {
     buttonSound();
     const provider = new GoogleAuthProvider();
@@ -54,13 +53,12 @@ function App() {
   };
 
   const randomAvatar = () => {
-    const max = 50; // there are 50 avatars available
-    const randomNum = Math.floor(Math.random() * max + 1);
+    const max = Object.keys(avatars).length;
+    const randomNum = Math.floor(Math.random() * max + 1); // Random number between 1 and max
     const avatar = avatars[randomNum];
     return avatar;
   };
 
-  // Anonymous sign in
   const anonymousSignIn = () => {
     buttonSound();
     auth.useDeviceLanguage();
