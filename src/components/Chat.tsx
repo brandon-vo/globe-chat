@@ -98,7 +98,8 @@ const Chat = ({ db }: ChatProps) => {
       return alert("You cannot send an empty message");
     }
 
-    const message = profanityFilter.clean(formValue); // Filter profanity out
+    // Temporarily disable profanity filter. Need to find a better solution
+    const message = formValue; //profanityFilter.clean(formValue); // Filter profanity out
 
     // Adding to messages collection
     if (db && user) {
