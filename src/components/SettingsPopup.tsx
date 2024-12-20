@@ -1,7 +1,9 @@
+import React, { useRef, useState } from "react";
+import AvatarEditor from "react-avatar-editor";
 import { useDarkModeStore, useUserStore, useVolumeStore } from "../store";
-import { useState } from "react";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
+import imageCompression from "browser-image-compression";
 import { auth } from "../firebase";
 import useSound from "use-sound";
 import sounds from "../helpers/getSounds";
@@ -10,68 +12,87 @@ import LightModeIcon from "@mui/icons-material/LightModeOutlined";
 import VolumeUpIcon from "@mui/icons-material/VolumeUpOutlined";
 import VolumeOffIcon from "@mui/icons-material/VolumeOffOutlined";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-
 function SettingsPopup() {
   const { user, setUser } = useUserStore();
   const { isDarkMode, toggleDarkMode } = useDarkModeStore();
   const { isMuted, toggleMute } = useVolumeStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const editorRef = useRef<AvatarEditor | null>(null);
   const [switchSound] = useSound(sounds.switch, { volume: isMuted ? 0 : 1 });
   const [clickSound] = useSound(sounds.button2);
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
 
-    if (file.size > MAX_FILE_SIZE) {
-      setError("File size exceeds 5MB. Please select a smaller file.");
-      return;
-    }
+    setFile(selectedFile);
+    setEditorOpen(true);
+  };
 
+  const handleCropUpload = async () => {
+    if (!editorRef.current) return;
+
+    setEditorOpen(false);
     setLoading(true);
     setError(null);
-    setFileName(file.name);
 
     try {
+      const canvas = editorRef.current.getImage();
+      const blob = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve),
+      );
+
+      if (!blob) {
+        throw new Error("Failed to generate image blob");
+      }
+
+      const fileFromBlob = new File([blob], "profile_picture.jpg", {
+        type: blob.type,
+        lastModified: Date.now(),
+      });
+
+      const compressedImage = await imageCompression(fileFromBlob, {
+        maxSizeMB: 1, // 1MB
+        maxWidthOrHeight: 500,
+        useWebWorker: true,
+      });
+
       const storage = getStorage();
       const fileRef = ref(storage, `profile_pictures/${user?.uid}`);
-
-      // Upload the file
-      await uploadBytes(fileRef, file);
+      await uploadBytes(fileRef, compressedImage);
 
       const photoURL = await getDownloadURL(fileRef);
 
       if (user) {
         await updateProfile(auth.currentUser!, {
-          photoURL: photoURL,
+          photoURL,
         });
 
         setUser({
           ...user,
-          photoURL: photoURL,
+          photoURL,
         });
       }
 
       setLoading(false);
+      setEditorOpen(false);
+      setFile(null);
     } catch (error) {
-      console.error("Error uploading file:", error);
-      setError("Failed to update profile picture.");
+      console.error("Error uploading image:", error);
+      setError("Failed to upload image");
       setLoading(false);
     }
   };
 
-  // Toggle between dark mode and light mode
   const darkModeToggle = () => {
     switchSound();
     toggleDarkMode();
   };
 
-  // Toggle mute state
   const muteToggle = () => {
     clickSound();
     toggleMute();
@@ -113,13 +134,59 @@ function SettingsPopup() {
               />
               {loading && <p className="text-blue-500 mt-2">Uploading...</p>}
               {error && <p className="text-red-500 mt-2">{error}</p>}
-              {fileName && !error && !loading && (
-                <p className="text-gray-500 mt-2">Selected file: {fileName}</p>
-              )}
             </div>
           )}
         </>
       )}
+
+      {/* Cropping Modal */}
+      {editorOpen && file && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-gray-700 text-black dark:text-white p-4 rounded-2xl shadow-lg">
+            <h4 className="font-bold text-lg mb-4">Upload profile picture</h4>
+            <AvatarEditor
+              ref={editorRef}
+              image={file}
+              width={200}
+              height={200}
+              border={50}
+              borderRadius={100}
+              scale={zoom}
+            />
+            <div className="mt-4 flex items-center">
+              <label htmlFor="zoom-slider" className="mr-2">
+                Zoom
+              </label>
+              <input
+                id="zoom-slider"
+                type="range"
+                min={1}
+                max={3}
+                step={0.1}
+                value={zoom}
+                onChange={(e) => setZoom(parseFloat(e.target.value))}
+                className="w-full"
+              />
+            </div>
+            <div className="mt-4 flex justify-center space-x-2">
+              {/* TODO: Make a button component */}
+              <button
+                onClick={() => setEditorOpen(false)}
+                className="bg-gray-300 hover:bg-gray-400 text-black py-2 px-4 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCropUpload}
+                className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded"
+              >
+                Upload
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Dark mode */}
       <div className="flex items-center justify-between mt-6">
         <p className="font-medium">{isDarkMode ? "Dark Mode" : "Light Mode"}</p>
