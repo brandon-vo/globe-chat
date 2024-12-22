@@ -28,7 +28,7 @@ function HomeScreen({
           globe chat
         </p>
         <p className="pb-5 font-light text-2xl tracking-normal text-gray-600 dark:text-gray-300 text-center">
-          a live chatting web app
+          chat with the world
         </p>
         <div className="relative">
           <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
