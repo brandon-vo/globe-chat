@@ -108,7 +108,7 @@ function SettingsPopup() {
               <img
                 src={user.photoURL}
                 alt="profile"
-                className="w-12 h-12 rounded-full"
+                className="rounded-full object-cover flex-shrink-0 w-12 h-12"
               />
             ) : (
               <div className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
@@ -138,6 +138,22 @@ function SettingsPopup() {
           )}
         </>
       )}
+
+      {/* Dark mode */}
+      <div className="flex items-center justify-between mt-6">
+        <p className="font-medium">{isDarkMode ? "Dark Mode" : "Light Mode"}</p>
+        <button onClick={darkModeToggle}>
+          {isDarkMode ? <DarkModeIcon /> : <LightModeIcon />}
+        </button>
+      </div>
+
+      {/* Mute toggle */}
+      <div className="flex items-center justify-between mt-6">
+        <p className="font-medium">{isMuted ? "Volume Off" : "Volume On"}</p>
+        <button onClick={muteToggle}>
+          {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+        </button>
+      </div>
 
       {/* Cropping Modal */}
       {editorOpen && file && (
@@ -186,22 +202,6 @@ function SettingsPopup() {
           </div>
         </div>
       )}
-
-      {/* Dark mode */}
-      <div className="flex items-center justify-between mt-6">
-        <p className="font-medium">{isDarkMode ? "Dark Mode" : "Light Mode"}</p>
-        <button onClick={darkModeToggle}>
-          {isDarkMode ? <DarkModeIcon /> : <LightModeIcon />}
-        </button>
-      </div>
-
-      {/* Mute toggle */}
-      <div className="flex items-center justify-between mt-6">
-        <p className="font-medium">{isMuted ? "Volume Off" : "Volume On"}</p>
-        <button onClick={muteToggle}>
-          {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
-        </button>
-      </div>
     </div>
   );
 }
