@@ -1,10 +1,10 @@
 import { formatRelative } from "date-fns";
 import useSound from "use-sound";
 import sounds from "../helpers/getSounds";
+import verifiedUserIDs from "../constants/verifiedUserIDs";
+import { useVolumeStore } from "../store";
 import verifiedIcon from "../assets/images/verifiedBadge.png";
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
-import { useVolumeStore } from "../store";
-import { verifiedUserIDs } from "../constants/verifiedUserIDs";
 
 // Date formatting using the date-fns library
 const formatDate = (date: Date) => {
@@ -59,13 +59,11 @@ const Message = ({
   return (
     <div className="mx-2 px-4 py-4 rounded-md hover:bg-gray-50 dark:text-white dark:hover:bg-gray-600 overflow-hidden flex items-start group">
       {photoURL ? (
-        <div className="relative w-12 h-12 rounded-full overflow-hidden mr-5">
-          <img
-            src={photoURL}
-            alt="Avatar"
-            className="object-cover w-full h-full"
-          />
-        </div>
+        <img
+          src={photoURL}
+          alt="Avatar"
+          className="rounded-full object-cover flex-shrink-0 w-12 h-12 mr-4"
+        />
       ) : null}
       <div className="w-full flex">
         <div className="w-full">

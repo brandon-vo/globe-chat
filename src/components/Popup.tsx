@@ -55,7 +55,7 @@ function Popup({
         onClick={closePopUp}
       />
       {/* Popup Window */}
-      <div className="w-4/5 md:w-3/4 lg:w-1/3 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl z-50">
+      <div className="w-11/12 md:w-3/4 lg:w-1/3 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 bg-white dark:bg-gray-700 text-black dark:text-white rounded-2xl z-50">
         {confirmMode ? (
           <div className="flex flex-col space-y-4">
             {children}
