@@ -46,3 +46,18 @@ export const useVolumeStore = create<VolumeStore>((set) => ({
       return { isMuted: newMuteState };
     }),
 }));
+
+type AIResponseStore = {
+  isAIResponseEnabled: boolean;
+  toggleAIResponse: () => void;
+};
+
+export const useAIResponseStore = create<AIResponseStore>((set) => ({
+  isAIResponseEnabled: JSON.parse(localStorage.getItem("aiResponse") || "true"),
+  toggleAIResponse: () =>
+    set((state) => {
+      const newAIState = !state.isAIResponseEnabled;
+      localStorage.setItem("aiResponse", JSON.stringify(newAIState));
+      return { isAIResponseEnabled: newAIState };
+    }),
+}));

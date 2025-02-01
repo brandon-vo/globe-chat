@@ -83,7 +83,7 @@ const Message = ({
             ) : null}
           </div>
           <p
-            className={`break-all ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}`}
+            className={`break-words ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}`}
           >
             {text}
           </p>

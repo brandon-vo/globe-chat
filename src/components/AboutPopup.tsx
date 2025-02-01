@@ -20,6 +20,7 @@ function AboutPopup() {
         className="text-blue-500 hover:text-blue-400 underline"
         href="https://github.com/brandon-vo/globe-chat"
         target="_blank"
+        rel="noreferrer"
       >
         Source code
       </a>

@@ -1,23 +1,24 @@
-import { useState, useEffect } from "react";
+// import Filter from "bad-words";
 import {
-  getFirestore,
-  collection,
   addDoc,
+  collection,
   deleteDoc,
   doc,
-  serverTimestamp,
-  query,
-  orderBy,
+  getFirestore,
   limit,
   onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
 } from "firebase/firestore";
-import Message from "./Message";
+import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import Filter from "bad-words";
+import { respondWithAIMessage } from "../helpers/ai";
 import sounds from "../helpers/getSounds";
-import Popup from "./Popup";
-import { useUserStore, useVolumeStore } from "../store";
+import { useAIResponseStore, useUserStore, useVolumeStore } from "../store";
 import { SubmitIcon } from "./Icon";
+import Message from "./Message";
+import Popup from "./Popup";
 
 interface ChatProps {
   user?: any;
@@ -47,8 +48,9 @@ const Chat = ({ db }: ChatProps) => {
   });
 
   const { user } = useUserStore();
+  const { isAIResponseEnabled: isAIResponse } = useAIResponseStore();
 
-  const profanityFilter = new Filter(); // Filter profanity out
+  //const profanityFilter = new Filter(); // Filter profanity out
 
   const [lastMessageTime, setLastMessageTime] = useState<number | null>(null);
   const messageCooldown = 500; // 500 ms
@@ -115,6 +117,10 @@ const Chat = ({ db }: ChatProps) => {
     setFormValue(""); // Clear text after submit
     messageSound();
     setLastMessageTime(new Date().getTime());
+
+    if (Math.random() < 0.25 && isAIResponse) {
+      await respondWithAIMessage(message);
+    }
   };
 
   const confirmDelete = async (

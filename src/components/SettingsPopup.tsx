@@ -1,21 +1,29 @@
+import DarkModeIcon from "@mui/icons-material/DarkModeOutlined";
+import ExtensionOffIcon from "@mui/icons-material/ExtensionOff";
+import LightModeIcon from "@mui/icons-material/LightModeOutlined";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import VolumeOffIcon from "@mui/icons-material/VolumeOffOutlined";
+import VolumeUpIcon from "@mui/icons-material/VolumeUpOutlined";
+import imageCompression from "browser-image-compression";
+import { updateProfile } from "firebase/auth";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import React, { useRef, useState } from "react";
 import AvatarEditor from "react-avatar-editor";
-import { useDarkModeStore, useUserStore, useVolumeStore } from "../store";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
-import imageCompression from "browser-image-compression";
-import { auth } from "../firebase";
 import useSound from "use-sound";
+import { auth } from "../firebase";
 import sounds from "../helpers/getSounds";
-import DarkModeIcon from "@mui/icons-material/DarkModeOutlined";
-import LightModeIcon from "@mui/icons-material/LightModeOutlined";
-import VolumeUpIcon from "@mui/icons-material/VolumeUpOutlined";
-import VolumeOffIcon from "@mui/icons-material/VolumeOffOutlined";
+import {
+  useAIResponseStore,
+  useDarkModeStore,
+  useUserStore,
+  useVolumeStore,
+} from "../store";
 
 function SettingsPopup() {
   const { user, setUser } = useUserStore();
   const { isDarkMode, toggleDarkMode } = useDarkModeStore();
   const { isMuted, toggleMute } = useVolumeStore();
+  const { isAIResponseEnabled, toggleAIResponse } = useAIResponseStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -98,6 +106,11 @@ function SettingsPopup() {
     toggleMute();
   };
 
+  const aiResponseToggle = () => {
+    clickSound();
+    toggleAIResponse();
+  };
+
   return (
     <div className="m-2">
       <h3 className="font-bold text-2xl mb-4">Settings</h3>
@@ -152,6 +165,16 @@ function SettingsPopup() {
         <p className="font-medium">{isMuted ? "Volume Off" : "Volume On"}</p>
         <button onClick={muteToggle}>
           {isMuted ? <VolumeOffIcon /> : <VolumeUpIcon />}
+        </button>
+      </div>
+
+      {/* Receive AI Responses */}
+      <div className="flex items-center justify-between mt-6">
+        <p className="font-medium">
+          {isAIResponseEnabled ? "AI Response On" : "AI Response Off"}
+        </p>
+        <button onClick={aiResponseToggle}>
+          {isAIResponseEnabled ? <SmartToyIcon /> : <ExtensionOffIcon />}
         </button>
       </div>
 

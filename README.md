@@ -1,7 +1,7 @@
 <h1 align="center">Globe Chat</h1>
 <p align="center">
   <b>A live chatting web app</b><br>
-    <a href="https://globechat.netlify.app/">Deployed on Netlify</a> 
+    <a href="https://globechat.netlify.app/">Deployed on Netlify</a>
   <br/>
 </p>
 
@@ -9,10 +9,10 @@
 
 ---
 
-Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room.
+Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room. I'm also integrating the Llama AI model as a chatbot to occasionally interact with users.
 
-Built with React, TypeScript, and Zustand.  
-Used Firebase to store user data and messages.  
+Built with React, TypeScript, and Zustand.
+Used Firebase to store user data and messages.
 Styled with Tailwind CSS.
 
 Features include theme toggles, pop up menus, sound effects, unique user profiles, and more.
