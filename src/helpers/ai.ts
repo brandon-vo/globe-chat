@@ -2,10 +2,13 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import llamaAvatar from "../assets/images/avatars/llama.png";
 import { db } from "../firebase";
 
-export async function respondWithAIMessage(receivedMessage: string) {
+export async function respondWithAIMessage(
+  receivedMessage: string,
+  receivedDisplayName: string,
+) {
   if (!receivedMessage) return;
 
-  const aiMessage = await getAIResponse(receivedMessage);
+  const aiMessage = await getAIResponse(receivedMessage, receivedDisplayName);
   if (!aiMessage) return;
 
   if (db) {
@@ -23,7 +26,10 @@ export async function respondWithAIMessage(receivedMessage: string) {
   }
 }
 
-export async function getAIResponse(userMessage: string): Promise<string> {
+export async function getAIResponse(
+  userMessage: string,
+  username: string,
+): Promise<string> {
   try {
     const API_BASE_URL =
       process.env.NODE_ENV === "development" ? "http://localhost:8888" : "";
@@ -33,7 +39,7 @@ export async function getAIResponse(userMessage: string): Promise<string> {
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userMessage }),
+        body: JSON.stringify({ userMessage, username }),
       },
     );
 

@@ -1,25 +1,25 @@
-import { auth, db } from "./firebase";
-import { useEffect, useState } from "react";
 import {
   GoogleAuthProvider,
-  signInWithPopup,
   signInAnonymously,
+  signInWithPopup,
   updateProfile,
 } from "firebase/auth";
-import { useDarkModeStore, useUserStore, useVolumeStore } from "./store";
-import MainChat from "./pages/MainChat";
-import HomeScreen from "./pages/HomeScreen";
-import NavBarWrapper from "./components/NavBarWrapper";
-import NavBar from "./components/NavBar";
-import ParticleBackground from "./components/ParticleBackground";
-import ParticleConfig from "./config/particle-config";
-import DarkParticleConfig from "./config/dark-particle-config";
+import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import avatars from "./helpers/getAvatar";
-import sounds from "./helpers/getSounds";
+import defaultAvatar from "./assets/images/avatars/avatar-1.jpg";
+import NavBar from "./components/NavBar";
+import NavBarWrapper from "./components/NavBarWrapper";
+import ParticleBackground from "./components/ParticleBackground";
+import DarkParticleConfig from "./config/dark-particle-config";
+import ParticleConfig from "./config/particle-config";
 import adjectives from "./constants/adjectives";
 import nouns from "./constants/nouns";
-import defaultAvatar from "./assets/images/avatars/avatar-1.jpg";
+import { auth, db } from "./firebase";
+import avatars from "./helpers/getAvatar";
+import sounds from "./helpers/getSounds";
+import HomeScreen from "./pages/HomeScreen";
+import MainChat from "./pages/MainChat";
+import { useDarkModeStore, useUserStore, useVolumeStore } from "./store";
 
 import "./App.css";
 
@@ -27,16 +27,15 @@ function App() {
   const { user, setUser } = useUserStore();
   const { isDarkMode } = useDarkModeStore();
   const { isMuted } = useVolumeStore();
+
   const [showAboutPopup, setShowAboutPopup] = useState<boolean>(false);
   const [showSettingsPopup, setShowSettingsPopup] = useState<boolean>(false);
+  const [showSignOutPopup, setShowSignOutPopup] = useState<boolean>(false);
   const [refreshAnonymous, setRefreshAnonymous] = useState<boolean>(false); // To fix display name issue
 
   // Sounds
   const [buttonSound] = useSound(sounds.button, { volume: isMuted ? 0 : 1 });
   const [clickSound] = useSound(sounds.click, { volume: isMuted ? 0 : 1 });
-  const [signOutSound] = useSound(sounds.signOut, {
-    volume: isMuted ? 0 : 0.8,
-  });
 
   // Setting user when signing in or out
   useEffect(() => {
@@ -47,8 +46,8 @@ function App() {
       }
       const firebaseUser = {
         uid: user.uid,
-        displayName: user.displayName || "Broken",
-        photoURL: user.photoURL || "",
+        displayName: user.displayName ?? "Broken User",
+        photoURL: user.photoURL ?? defaultAvatar,
         isAnonymous: user.isAnonymous,
       };
       setUser(firebaseUser);
@@ -70,26 +69,29 @@ function App() {
     return avatar;
   };
 
-  // TODO: Do something where users on the same device sign into the same anonymous account as before if within a certain time frame
+  // TODO: Do something where users on the same device sign into the same anonymous account as before if within a certain time frame?
   const anonymousSignIn = () => {
     buttonSound();
     auth.useDeviceLanguage();
     signInAnonymously(auth)
       .then((userCredential) => {
         const user = userCredential.user;
+        if (!user) return;
+
+        // number of combinations = number of adjectives * number of nouns
         const displayName =
           adjectives[Math.floor(Math.random() * adjectives.length)] +
           " " +
           nouns[Math.floor(Math.random() * nouns.length)];
-        if (!user) return;
+
         updateProfile(user, {
           displayName,
           photoURL: randomAvatar() || defaultAvatar,
         }).then(() => {
           const firebaseUser = {
             uid: user.uid,
-            displayName: user.displayName || "Broken",
-            photoURL: user.photoURL || "",
+            displayName: user.displayName || "Broken Anonymous",
+            photoURL: user.photoURL || defaultAvatar,
             isAnonymous: user.isAnonymous,
           };
           setUser(firebaseUser);
@@ -103,19 +105,19 @@ function App() {
   useEffect(() => {}, [refreshAnonymous]);
 
   // Sign out
-  const signOut = () => {
-    auth.signOut().catch((error) => alert(error));
-    signOutSound();
+  const signOutPopup = () => {
+    setShowSignOutPopup((prev) => !prev);
+    clickSound();
   };
 
   // About pop up
-  const aboutPopUp = () => {
+  const aboutPopup = () => {
     setShowAboutPopup((prev) => !prev);
     clickSound();
   };
 
   // Settings pop up
-  const settingsPopUp = () => {
+  const settingsPopup = () => {
     setShowSettingsPopup((prev) => !prev);
     clickSound();
   };
@@ -131,14 +133,14 @@ function App() {
         <NavBarWrapper>
           {user ? (
             <NavBar
-              aboutPopUp={aboutPopUp}
-              settingsPopUp={settingsPopUp}
-              signOut={signOut}
+              aboutPopup={aboutPopup}
+              signOutPopup={signOutPopup}
+              settingsPopup={settingsPopup}
             />
           ) : (
             <NavBar
-              aboutPopUp={aboutPopUp}
-              settingsPopUp={settingsPopUp}
+              aboutPopup={aboutPopup}
+              settingsPopup={settingsPopup}
               signInWithGoogle={signInWithGoogle}
             />
           )}
@@ -148,8 +150,10 @@ function App() {
             db={db}
             showAboutPopup={showAboutPopup}
             showSettingsPopup={showSettingsPopup}
+            showSignOutPopup={showSignOutPopup}
             setShowAboutPopup={setShowAboutPopup}
             setShowSettingsPopup={setShowSettingsPopup}
+            setShowSignOutPopup={setShowSignOutPopup}
           />
         ) : (
           <HomeScreen

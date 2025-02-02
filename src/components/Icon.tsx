@@ -30,8 +30,8 @@ function Logo() {
 function GoogleIcon() {
   return (
     <div
-      className="rounded shadow-button pl-6 pr-8 py-5 
-                bg-gray-50 hover:bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500 
+      className="rounded shadow-button pl-6 pr-8 py-5
+                bg-gray-50 hover:bg-gray-100 text-gray-600 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500
                 font-medium flex items-center justify-center overflow-y-hidden focus:outline-none
                 focus:ring focus:ring-primary-500 focus:ring-opacity-75 shadow-md"
     >
@@ -43,8 +43,8 @@ function GoogleIcon() {
         {/* Google Logo */}
         <path
           fill="#EA4335"
-          d="M15.3-4.2c3.3-1.1 7-1.1 10.3.1 1.8.7 3.5 1.7 4.9 3-.5.5-1 1-1.5 1.5-.9.9-1.9 1.8-2.8 
-                    2.8-.9-.9-2.1-1.5-3.3-1.9-1.4-.4-3-.5-4.5-.2-1.7.4-3.3 1.2-4.6 2.5-1 1-1.8 2.2-2.2 
+          d="M15.3-4.2c3.3-1.1 7-1.1 10.3.1 1.8.7 3.5 1.7 4.9 3-.5.5-1 1-1.5 1.5-.9.9-1.9 1.8-2.8
+                    2.8-.9-.9-2.1-1.5-3.3-1.9-1.4-.4-3-.5-4.5-.2-1.7.4-3.3 1.2-4.6 2.5-1 1-1.8 2.2-2.2
                     3.5-1.7-1.3-3.3-2.5-5-3.8 1.8-3.5 5-6.2 8.7-7.5z"
         />
         <path
@@ -68,24 +68,4 @@ function GoogleIcon() {
   );
 }
 
-// TODO replace with a different icon from pack
-function SubmitIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="2"
-        d="M14 5l7 7m0 0l-7 7m7-7H3"
-      />
-    </svg>
-  );
-}
-
-export { Logo, GoogleIcon, SubmitIcon };
+export { Logo, GoogleIcon };

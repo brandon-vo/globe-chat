@@ -1,25 +1,53 @@
+import { Firestore } from "firebase/firestore";
+import useSound from "use-sound";
+import AboutPopup from "../components/AboutPopup";
 import Chat from "../components/Chat";
 import Popup from "../components/Popup";
-import AboutPopup from "../components/AboutPopup";
 import SettingsPopup from "../components/SettingsPopup";
-import { useUserStore } from "../store";
+import SignOutPopup from "../components/SignOutPopup";
+import { auth } from "../firebase";
+import sounds from "../helpers/getSounds";
+import { useUserStore, useVolumeStore } from "../store";
 
 interface MainChatProps {
-  db: any; // TODO
+  db: Firestore;
   showAboutPopup: boolean;
   showSettingsPopup: boolean;
+  showSignOutPopup: boolean;
   setShowAboutPopup: (value: boolean) => void;
   setShowSettingsPopup: (value: boolean) => void;
+  setShowSignOutPopup: (value: boolean) => void;
 }
 
 function MainChat({
   db,
   showAboutPopup,
   showSettingsPopup,
+  showSignOutPopup,
   setShowAboutPopup,
   setShowSettingsPopup,
+  setShowSignOutPopup,
 }: MainChatProps) {
   const { user } = useUserStore();
+  const { isMuted } = useVolumeStore();
+
+  const [signOutSound] = useSound(sounds.signOut, {
+    volume: isMuted ? 0 : 0.8,
+  });
+
+  const signOut = () => {
+    setShowSignOutPopup(false);
+    auth
+      .signOut()
+      .then(() => {
+        signOutSound();
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
+
+  if (!user) return null;
 
   return (
     <>
@@ -35,6 +63,15 @@ function MainChat({
       </Popup>
       <Popup trigger={showSettingsPopup} setTrigger={setShowSettingsPopup}>
         <SettingsPopup />
+      </Popup>
+      <Popup
+        trigger={showSignOutPopup}
+        setTrigger={setShowSignOutPopup}
+        confirmMode={true}
+        confirmText="Sign Out"
+        onConfirm={signOut}
+      >
+        <SignOutPopup />
       </Popup>
       <Chat user={user} db={db} />
     </>

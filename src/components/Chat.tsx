@@ -1,9 +1,10 @@
-// import Filter from "bad-words";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
+  Firestore,
   getFirestore,
   limit,
   onSnapshot,
@@ -15,14 +16,18 @@ import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import { respondWithAIMessage } from "../helpers/ai";
 import sounds from "../helpers/getSounds";
-import { useAIResponseStore, useUserStore, useVolumeStore } from "../store";
-import { SubmitIcon } from "./Icon";
+import {
+  useAIResponseStore,
+  User,
+  useUserStore,
+  useVolumeStore,
+} from "../store";
 import Message from "./Message";
 import Popup from "./Popup";
 
 interface ChatProps {
-  user?: any;
-  db?: any;
+  user: User;
+  db: Firestore;
 }
 
 interface MessageType {
@@ -49,8 +54,6 @@ const Chat = ({ db }: ChatProps) => {
 
   const { user } = useUserStore();
   const { isAIResponseEnabled: isAIResponse } = useAIResponseStore();
-
-  //const profanityFilter = new Filter(); // Filter profanity out
 
   const [lastMessageTime, setLastMessageTime] = useState<number | null>(null);
   const messageCooldown = 500; // 500 ms
@@ -100,14 +103,13 @@ const Chat = ({ db }: ChatProps) => {
       return alert("You cannot send an empty message");
     }
 
-    // Temporarily disable profanity filter. Need to find a better solution
-    const message = formValue; //profanityFilter.clean(formValue); // Filter profanity out
+    const message = formValue;
 
     // Adding to messages collection
     if (db && user) {
       const messagesRef = collection(db, "messages");
       await addDoc(messagesRef, {
-        text: message,
+        text: formValue,
         createdAt: serverTimestamp(),
         uid: user.uid,
         displayName: user.displayName,
@@ -119,7 +121,7 @@ const Chat = ({ db }: ChatProps) => {
     setLastMessageTime(new Date().getTime());
 
     if (Math.random() < 0.25 && isAIResponse) {
-      await respondWithAIMessage(message);
+      await respondWithAIMessage(message, user?.displayName || "Anonymous");
     }
   };
 
@@ -143,8 +145,8 @@ const Chat = ({ db }: ChatProps) => {
 
   const deleteMessage = async () => {
     try {
-      const messageRef = doc(db, "messages", messageIDToDelete); // Get a reference to the document
-      await deleteDoc(messageRef); // Delete the document
+      const messageRef = doc(db, "messages", messageIDToDelete);
+      await deleteDoc(messageRef);
     } catch (error) {
       console.error("Error deleting message:", error);
     } finally {
@@ -166,23 +168,22 @@ const Chat = ({ db }: ChatProps) => {
       <div className="mb-6 mx-4">
         <form
           onSubmit={sendMessage}
-          className="flex flex-row bg-gray-100 dark:bg-gray-600 dark:text-white rounded-md px-6 py-3 z-10 max-w-screen-lg mx-auto shadow-md"
+          className="flex flex-row bg-gray-100 dark:bg-gray-600 dark:text-white rounded-md my-3 px-6x z-10 max-w-screen-lg mx-auto shadow-md"
         >
           <input
             type="text"
             value={formValue}
             onChange={(e) => setFormValue(e.target.value)}
             placeholder="please be kind to others..."
-            className="flex-1 bg-transparent outline-none"
+            className="flex-1 bg-transparent outline-none px-6"
           />
-          {/* todo remove mt-0.5 after finding a good submit icon */}
           <button
             type="submit"
             disabled={!formValue}
-            className="flex flex-row bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
-              dark:hover:bg-gray-700 rounded-md max-w-screen-lg mx-auto px-3 focus-visible:ring focus:none mt-0.5"
+            className="flex flex-row h-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-600 dark:text-white
+              dark:hover:bg-gray-500 rounded-md max-w-screen-lg mx-auto px-5 py-3 focus-visible:ring focus:none rounded-l-none"
           >
-            <SubmitIcon />
+            <KeyboardBackspaceIcon style={{ rotate: "180deg" }} />
           </button>
         </form>
       </div>
@@ -205,10 +206,13 @@ const Chat = ({ db }: ChatProps) => {
         trigger={showConfirmDelete}
         setTrigger={setShowConfirmDelete}
         confirmMode={true}
+        confirmText="Delete"
         onConfirm={deleteMessage}
       >
         <div className="flex flex-col items-center">
-          <p>Are you sure you want to delete this message?</p>
+          <h2 className="text-lg">
+            Are you sure you want to delete this message?
+          </h2>
           <p className="text-sm text-gray-300 gap-1">
             <strong>TIP: </strong> Hold <kbd>Shift</kbd> to delete a message
             without confirmation

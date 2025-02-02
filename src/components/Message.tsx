@@ -1,10 +1,11 @@
+import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 import { formatRelative } from "date-fns";
 import useSound from "use-sound";
-import sounds from "../helpers/getSounds";
-import verifiedUserIDs from "../constants/verifiedUserIDs";
-import { useVolumeStore } from "../store";
 import verifiedIcon from "../assets/images/verifiedBadge.png";
-import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
+import { admin } from "../constants/roles";
+import verifiedUserIDs from "../constants/verifiedUserIDs";
+import sounds from "../helpers/getSounds";
+import { useVolumeStore } from "../store";
 
 // Date formatting using the date-fns library
 const formatDate = (date: Date) => {
@@ -54,7 +55,7 @@ const Message = ({
   }
 
   const isCurrentUserMessage = uid === currentUserUid;
-  const isBrandon = currentUserUid === "3y8XlQiLCscOR3uQ7UwrSCHgF932";
+  const isAdmin = admin.includes(currentUserUid);
 
   return (
     <div className="mx-2 px-4 py-4 rounded-md hover:bg-gray-50 dark:text-white dark:hover:bg-gray-600 overflow-hidden flex items-start group">
@@ -83,12 +84,12 @@ const Message = ({
             ) : null}
           </div>
           <p
-            className={`break-words ${uid === "3y8XlQiLCscOR3uQ7UwrSCHgF932" && "text-green-500"}`}
+            className={`break-words ${uid && admin.includes(uid) && "text-green-500"}`}
           >
             {text}
           </p>
         </div>
-        {(isCurrentUserMessage || isBrandon) && (
+        {(isCurrentUserMessage || isAdmin) && (
           <div className="flex items-center">
             <div className="w-8">
               <button

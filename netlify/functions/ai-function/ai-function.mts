@@ -1,7 +1,8 @@
-import Groq from "groq-sdk";
+import OpenAI from "openai";
 
-const groq = new Groq({
+const client = new OpenAI({
   apiKey: process.env.GROQ_API_KEY,
+  baseURL: "https://api.groq.com/openai/v1",
 });
 
 export default async (request: Request) => {
@@ -21,20 +22,22 @@ export default async (request: Request) => {
       return new Response("Method Not Allowed", { status: 405 });
     }
 
-    const { userMessage } = await request.json();
+    const { userMessage, username } = await request.json();
     if (!userMessage) {
       return new Response("Missing userMessage", { status: 400 });
     }
+    if (!username) {
+      return new Response("Missing username", { status: 400 });
+    }
 
-    const completion = await groq.chat.completions.create({
+    const completion = await client.chat.completions.create({
       messages: [
         {
           role: "system",
-          content:
-            "You are a brainrot gen-z person in an online chat, named Llama. Talk to the user. Keep responses natural and conversational. Limit your response to one or two sentences.",
+          content: `You are a brainrot gen-z person in an online chat, named Llama. The username of the person you are responding to is "${username}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`,
           // "You are a friendly person in an online chat, named Llama. Talk to the user. Match the language style of the user, including formality, slang, and sentence structure. Keep responses natural and conversational by giving an interesting fact. Limit your response to one or two sentences.",
         },
-        { role: "user", content: userMessage },
+        { role: "user", content: `${userMessage}` },
       ],
       // model: "llama-3.3-70b-versatile",
       model: "llama-3.1-8b-instant",

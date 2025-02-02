@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface User {
+export interface User {
   uid: string;
   displayName: string;
   photoURL: string;
@@ -23,7 +23,7 @@ type DarkModeStore = {
 };
 
 export const useDarkModeStore = create<DarkModeStore>((set) => ({
-  isDarkMode: JSON.parse(localStorage.getItem("dark") || "false"),
+  isDarkMode: JSON.parse(localStorage.getItem("dark") || "true"),
   toggleDarkMode: () =>
     set((state) => {
       const newMode = !state.isDarkMode;
