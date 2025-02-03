@@ -6,7 +6,7 @@ export async function respondWithAIMessage(
   receivedMessage: string,
   receivedDisplayName: string,
 ) {
-  if (!receivedMessage) return;
+  if (!receivedMessage || !receivedDisplayName) return;
 
   const aiMessage = await getAIResponse(receivedMessage, receivedDisplayName);
   if (!aiMessage) return;

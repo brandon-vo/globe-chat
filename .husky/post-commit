@@ -1,5 +1,4 @@
-COMMIT_MSG_FILE=$1
-COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+COMMIT_MSG=$(git log -1 --pretty=%B)
 
 # X.Y: Message or X.Y.Z: Message
 VERSION=$(echo "$COMMIT_MSG" | awk -F ': ' '{print $1}')
