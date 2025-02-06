@@ -9,14 +9,9 @@
 
 ---
 
-<<<<<<< Updated upstream
-Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room. I'm also integrating the Llama AI model as a chatbot to occasionally interact with users.
-=======
-Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room. A chatbot has been integrating using the Llama AI model occasionally interact with users.
+Globe Chat is a real-time web app used to chat with anybody around the world. Users will sign in with their Google accounts or log in anonymously to be able to chat with other users in a single chat room. A chatbot has been integrated into a scheduled Netlify function using the Llama AI model, interacting with the chat once a day on average.
 
-> > > > > > > Stashed changes
-
-Built with React, TypeScript, and Zustand.
+Built with React, TypeScript, Zustand, Netlify.
 Used Firebase to store user data and messages.
 Styled with Tailwind CSS.
 

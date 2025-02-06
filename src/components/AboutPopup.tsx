@@ -16,7 +16,7 @@ function AboutPopup() {
       </p>
       <br />
       Built with React, TypeScript, Firebase, Zustand, Tailwind CSS, OpenAI,
-      GroqCloud.
+      GroqCloud, Netlify.
       <br />
       <a
         className="text-blue-500 hover:text-blue-400 underline"
