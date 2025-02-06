@@ -5,7 +5,7 @@ const client = new OpenAI({
   baseURL: "https://api.groq.com/openai/v1",
 });
 
-export default async (request: Request) => {
+const AIFunction = async (request: Request) => {
   try {
     if (request.method === "OPTIONS") {
       return new Response(null, {
@@ -34,7 +34,7 @@ export default async (request: Request) => {
       messages: [
         {
           role: "system",
-          content: `You are a brainrot gen-z person in an online chat, named Llama. The username of the person you are responding to is "${username}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`,
+          content: `You are a brainrot Gen-Z person in an online chat, named Llama. The username of the person you are responding to is "${username}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`,
           // "You are a friendly person in an online chat, named Llama. Talk to the user. Match the language style of the user, including formality, slang, and sentence structure. Keep responses natural and conversational by giving an interesting fact. Limit your response to one or two sentences.",
         },
         { role: "user", content: `${userMessage}` },
@@ -57,3 +57,5 @@ export default async (request: Request) => {
     return new Response("Internal Server Error", { status: 500 });
   }
 };
+
+export default AIFunction;
