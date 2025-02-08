@@ -1,6 +1,6 @@
 {
   "name": "globe-chat",
-  "version": "3.5.1",
+  "version": "3.5.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",

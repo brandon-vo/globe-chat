@@ -1,8 +1,8 @@
-import Popup from "../components/Popup";
-import AboutPopup from "../components/AboutPopup";
-import SettingsPopup from "../components/SettingsPopup";
-import { GoogleIcon } from "../components/Icon";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import AboutPopup from "../components/AboutPopup";
+import { GoogleSignIn } from "../components/Icon";
+import Popup from "../components/Popup";
+import SettingsPopup from "../components/SettingsPopup";
 
 interface HomeScreenProps {
   signInWithGoogle: () => void;
@@ -33,7 +33,7 @@ function HomeScreen({
         <div className="relative">
           <div className="pt-4 pb-2 flex justify-center mb-2 text-2xl">
             <button onClick={signInWithGoogle}>
-              <GoogleIcon />
+              <GoogleSignIn />
             </button>
           </div>
           <div className="flex justify-center mb-2">

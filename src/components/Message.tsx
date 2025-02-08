@@ -58,7 +58,7 @@ const Message = ({
   const isAdmin = admin.includes(currentUserUid);
 
   return (
-    <div className="mx-2 px-4 py-4 rounded-md hover:bg-gray-50 dark:text-white dark:hover:bg-gray-600 overflow-hidden flex items-start group">
+    <div className="mx-2 px-4 py-4 rounded-md hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 overflow-hidden flex items-start group">
       {photoURL ? (
         <img
           src={photoURL}
@@ -69,25 +69,32 @@ const Message = ({
       <div className="w-full flex">
         <div className="w-full">
           <div className="flex items-center mb-1">
-            {displayName ? (
-              <p className="mr-2 text-primary-500">{displayName}</p>
-            ) : null}
-            {verified ? (
+            {displayName && (
+              <p className="text-primary-500 mr-2">{displayName}</p>
+            )}
+            {uid?.toLowerCase().includes("ai") && (
+              <div className="text-xs px-2 py-1/2 rounded-md mr-2 bg-gradient-to-tl from-purple-400 to-red-300 shadow-sm text-white">
+                AI
+              </div>
+            )}
+            {verified && (
               <div className="-ml-1 mr-2">
                 <img src={verifiedIcon} width={15} height={15} alt="Verified" />
               </div>
-            ) : null}
-            {createdAt?.seconds ? (
+            )}
+            {createdAt?.seconds && (
               <span className="text-gray-600 dark:text-gray-400 text-xs">
                 {formatDate(new Date(createdAt.seconds * 1000))}
               </span>
-            ) : null}
+            )}
           </div>
-          <p
-            className={`break-words ${uid && admin.includes(uid) && "text-green-500"}`}
-          >
-            {text}
-          </p>
+          <div className="w-full pr-4">
+            <p
+              className={`break-words ${uid && admin.includes(uid) && "text-green-500"}`}
+            >
+              {text}
+            </p>
+          </div>
         </div>
         {(isCurrentUserMessage || isAdmin) && (
           <div className="flex items-center">

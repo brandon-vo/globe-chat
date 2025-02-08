@@ -32,6 +32,7 @@ function App() {
   const [showSettingsPopup, setShowSettingsPopup] = useState<boolean>(false);
   const [showSignOutPopup, setShowSignOutPopup] = useState<boolean>(false);
   const [refreshAnonymous, setRefreshAnonymous] = useState<boolean>(false); // To fix display name issue
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Sounds
   const [buttonSound] = useSound(sounds.button, { volume: isMuted ? 0 : 1 });
@@ -42,15 +43,16 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {
         setUser(null);
-        return;
+      } else {
+        const firebaseUser = {
+          uid: user.uid,
+          displayName: user.displayName ?? "Broken User",
+          photoURL: user.photoURL ?? defaultAvatar,
+          isAnonymous: user.isAnonymous,
+        };
+        setUser(firebaseUser);
       }
-      const firebaseUser = {
-        uid: user.uid,
-        displayName: user.displayName ?? "Broken User",
-        photoURL: user.photoURL ?? defaultAvatar,
-        isAnonymous: user.isAnonymous,
-      };
-      setUser(firebaseUser);
+      setLoading(false);
     });
     return unsubscribe;
   }, [setUser]);
@@ -59,7 +61,7 @@ function App() {
     buttonSound();
     const provider = new GoogleAuthProvider();
     auth.useDeviceLanguage();
-    signInWithPopup(auth, provider).catch((error: any) => console.error(error));
+    signInWithPopup(auth, provider).catch((error) => console.error(error));
   };
 
   const randomAvatar = () => {
@@ -131,39 +133,55 @@ function App() {
           />
         )}
         <NavBarWrapper>
-          {user ? (
-            <NavBar
-              aboutPopup={aboutPopup}
-              signOutPopup={signOutPopup}
-              settingsPopup={settingsPopup}
-            />
+          {loading ? (
+            <NavBar aboutPopup={aboutPopup} settingsPopup={settingsPopup} />
           ) : (
-            <NavBar
-              aboutPopup={aboutPopup}
-              settingsPopup={settingsPopup}
-              signInWithGoogle={signInWithGoogle}
-            />
+            <>
+              {user ? (
+                <NavBar
+                  aboutPopup={aboutPopup}
+                  signOutPopup={signOutPopup}
+                  settingsPopup={settingsPopup}
+                />
+              ) : (
+                <NavBar
+                  aboutPopup={aboutPopup}
+                  settingsPopup={settingsPopup}
+                  signInWithGoogle={signInWithGoogle}
+                />
+              )}
+            </>
           )}
         </NavBarWrapper>
-        {user ? (
-          <MainChat
-            db={db}
-            showAboutPopup={showAboutPopup}
-            showSettingsPopup={showSettingsPopup}
-            showSignOutPopup={showSignOutPopup}
-            setShowAboutPopup={setShowAboutPopup}
-            setShowSettingsPopup={setShowSettingsPopup}
-            setShowSignOutPopup={setShowSignOutPopup}
-          />
+        {loading ? (
+          <div className="flex items-center justify-center w-screen h-screen">
+            <p className="pb-2 font-medium text-5xl tracking-wider text-black dark:text-white text-center">
+              globe chat
+            </p>
+          </div>
         ) : (
-          <HomeScreen
-            signInWithGoogle={signInWithGoogle}
-            anonymousSignIn={anonymousSignIn}
-            showAboutPopup={showAboutPopup}
-            showSettingsPopup={showSettingsPopup}
-            setShowAboutPopup={setShowAboutPopup}
-            setShowSettingsPopup={setShowSettingsPopup}
-          />
+          <>
+            {user ? (
+              <MainChat
+                db={db}
+                showAboutPopup={showAboutPopup}
+                showSettingsPopup={showSettingsPopup}
+                showSignOutPopup={showSignOutPopup}
+                setShowAboutPopup={setShowAboutPopup}
+                setShowSettingsPopup={setShowSettingsPopup}
+                setShowSignOutPopup={setShowSignOutPopup}
+              />
+            ) : (
+              <HomeScreen
+                signInWithGoogle={signInWithGoogle}
+                anonymousSignIn={anonymousSignIn}
+                showAboutPopup={showAboutPopup}
+                showSettingsPopup={showSettingsPopup}
+                setShowAboutPopup={setShowAboutPopup}
+                setShowSettingsPopup={setShowSettingsPopup}
+              />
+            )}
+          </>
         )}
       </div>
     </div>
