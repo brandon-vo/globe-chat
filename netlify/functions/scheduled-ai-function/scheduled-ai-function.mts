@@ -5,9 +5,7 @@ import { openings, topics } from "../../prompt";
 
 if (!admin.apps.length) {
   try {
-    const serviceAccount = JSON.parse(
-      process.env.FIREBASE_SERVICE_ACCOUNT || "{}",
-    );
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || "{}");
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
@@ -33,21 +31,22 @@ const ScheduledAIFunction = async () => {
 
     const randomTopic = topics[Math.floor(Math.random() * topics.length)];
     const topicOpening = openings[Math.floor(Math.random() * openings.length)];
-    const isLonely = Math.random() < 0.6;
+    const isLonely = Math.random() < 0.8;
+    const inOneSentence = Math.random() < 0.5;
 
     const completion = await client.chat.completions.create({
       messages: [
         {
           role: "system",
           content: `You are a brainrot Gen-Z person named Llama in an online chat.
-          ${isLonely ? "You are lonely." : `Drop an interesting fact in the chat about the topic: ${randomTopic}`}.`,
+          ${isLonely ? "You are lonely." : `State an interesting fact in the chat about the topic: ${randomTopic} ${inOneSentence ? "in one sentence" : ""}`}.`,
         },
         {
           role: "user",
           content: `${
             isLonely
               ? "You are the only person online. Express that you are lonely to the chat"
-              : `Using the opening, ${topicOpening}, drop a fact about the topic: ${randomTopic}`
+              : `Using the opening, ${topicOpening}, state a fact about the topic: ${randomTopic} ${inOneSentence ? "in one sentence" : ""}`
           }`,
         },
       ],
