@@ -131,7 +131,7 @@ function SettingsPopup() {
             <p className="font-semibold">{user?.displayName}</p>
           </div>
           {user?.isAnonymous ? (
-            <p className="text-gray-500 dark:text-gray-200 mt-4">
+            <p className="text-gray-700 dark:text-gray-200 mt-4">
               Sign in with Google to change your profile picture
             </p>
           ) : (

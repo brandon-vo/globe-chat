@@ -1,5 +1,4 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import llamaAvatar from "../assets/images/avatars/llama.png";
 import { db } from "../firebase";
 
 export async function respondWithAIMessage(
@@ -17,7 +16,7 @@ export async function respondWithAIMessage(
       createdAt: serverTimestamp(),
       uid: "ai_model_llama",
       displayName: "Llama",
-      photoURL: llamaAvatar,
+      photoURL: "assets/images/avatars/llama.png",
     }).catch((error) => {
       console.error("Error adding document: ", error);
     });

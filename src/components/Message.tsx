@@ -1,7 +1,6 @@
 import DeleteOutlineOutlined from "@mui/icons-material/DeleteOutlineOutlined";
 import { formatRelative } from "date-fns";
 import useSound from "use-sound";
-import verifiedIcon from "../assets/images/verifiedBadge.png";
 import { admin } from "../constants/roles";
 import verifiedUserIDs from "../constants/verifiedUserIDs";
 import sounds from "../helpers/getSounds";
@@ -59,13 +58,15 @@ const Message = ({
 
   return (
     <div className="mx-2 px-4 py-4 rounded-md hover:bg-gray-100 dark:text-white dark:hover:bg-gray-800 overflow-hidden flex items-start group">
-      {photoURL ? (
-        <img
-          src={photoURL}
-          alt="Avatar"
-          className="rounded-full object-cover flex-shrink-0 w-12 h-12 mr-4"
-        />
-      ) : null}
+      <img
+        src={
+          photoURL?.includes("/static/media/")
+            ? "assets/images/avatars/avatar-1.jpg"
+            : photoURL
+        }
+        alt="Avatar"
+        className="rounded-full object-cover flex-shrink-0 w-12 h-12 mr-4"
+      />
       <div className="w-full flex">
         <div className="w-full">
           <div className="flex items-center mb-1">
@@ -79,7 +80,12 @@ const Message = ({
             )}
             {verified && (
               <div className="-ml-1 mr-2">
-                <img src={verifiedIcon} width={15} height={15} alt="Verified" />
+                <img
+                  src="assets/images/verifiedBadge.png"
+                  width={15}
+                  height={15}
+                  alt="Verified"
+                />
               </div>
             )}
             {createdAt?.seconds && (

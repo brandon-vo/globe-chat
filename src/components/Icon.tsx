@@ -1,5 +1,5 @@
-import GlobeIcon from "../assets/GlobeIcon";
-import GoogleIcon from "../assets/GoogleIcon";
+import GlobeIcon from "../constants/GlobeIcon";
+import GoogleIcon from "../constants/GoogleIcon";
 
 function Brand() {
   return (

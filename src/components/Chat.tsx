@@ -213,7 +213,7 @@ const Chat = ({ db }: ChatProps) => {
           <h2 className="text-lg">
             Are you sure you want to delete this message?
           </h2>
-          <p className="text-sm text-gray-300 gap-1">
+          <p className="text-sm text-gray-700 dark:text-gray-300 gap-1">
             <strong>TIP: </strong> Hold <kbd>Shift</kbd> to delete a message
             without confirmation
           </p>

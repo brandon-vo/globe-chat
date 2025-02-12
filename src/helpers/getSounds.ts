@@ -1,11 +1,11 @@
 const sounds: Record<string, string> = {
-  button: require("../assets/sounds/button-1.wav").default,
-  button2: require("../assets/sounds/button-2.wav").default,
-  button3: require("../assets/sounds/button-3.wav").default,
-  click: require("../assets/sounds/click.wav").default,
-  message: require("../assets/sounds/message.wav").default,
-  signOut: require("../assets/sounds/signOut.wav").default,
-  switch: require("../assets/sounds/switch.wav").default,
+  button: "assets/sounds/button-1.wav",
+  button2: "assets/sounds/button-2.wav",
+  button3: "assets/sounds/button-3.wav",
+  click: "assets/sounds/click.wav",
+  message: "assets/sounds/message.wav",
+  signOut: "assets/sounds/signOut.wav",
+  switch: "assets/sounds/switch.wav",
 };
 
 export default sounds;

@@ -6,7 +6,6 @@ import {
 } from "firebase/auth";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import defaultAvatar from "./assets/images/avatars/avatar-1.jpg";
 import NavBar from "./components/NavBar";
 import NavBarWrapper from "./components/NavBarWrapper";
 import ParticleBackground from "./components/ParticleBackground";
@@ -37,6 +36,8 @@ function App() {
   // Sounds
   const [buttonSound] = useSound(sounds.button, { volume: isMuted ? 0 : 1 });
   const [clickSound] = useSound(sounds.click, { volume: isMuted ? 0 : 1 });
+
+  const defaultAvatar = "assets/images/avatars/avatar-1.jpg";
 
   // Setting user when signing in or out
   useEffect(() => {
