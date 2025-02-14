@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
-import { respondWithAIMessage } from "../helpers/ai";
+import { respondWithAIMessage } from "../helpers/aiMessageHandler";
 import sounds from "../helpers/getSounds";
 import {
   useAIResponseStore,

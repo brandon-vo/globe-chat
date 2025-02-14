@@ -7,7 +7,9 @@ export async function respondWithAIMessage(
 ) {
   if (!receivedMessage || !receivedDisplayName) return;
 
-  const aiMessage = await getAIResponse(receivedMessage, receivedDisplayName);
+  const aiPrompt = `You are a brainrot Gen-Z person in an online chat, named Llama. The username of the person you are responding to is "${receivedDisplayName}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`
+
+  const aiMessage = await getAIResponse(receivedMessage, receivedDisplayName, aiPrompt);
   if (!aiMessage) return;
 
   if (db) {
@@ -28,17 +30,18 @@ export async function respondWithAIMessage(
 export async function getAIResponse(
   userMessage: string,
   username: string,
+  aiPrompt: string,
 ): Promise<string> {
   try {
     const API_BASE_URL =
       process.env.NODE_ENV === "development" ? "http://localhost:8888" : "";
 
     const response = await fetch(
-      `${API_BASE_URL}/.netlify/functions/ai-function`,
+      `${API_BASE_URL}/.netlify/functions/ai-message`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userMessage, username }),
+        body: JSON.stringify({ userMessage, username, aiPrompt }),
       },
     );
 

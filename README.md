@@ -1,7 +1,10 @@
 <h1 align="center">Globe Chat</h1>
 <p align="center">
   <b>A live chatting web app</b><br>
-    <a href="https://globechat.netlify.app/">Deployed on Netlify</a>
+    <a href="https://globechat.netlify.app/">Deployed on Netlify</a><br/>
+    <a href="https://app.netlify.com/sites/globechat/deploys">
+      <img src="https://api.netlify.com/api/v1/badges/e4cbb284-f8ab-45d1-939a-ff9818b99d26/deploy-status" alt="Netlify Status" />
+    </a>
   <br/>
 </p>
 
@@ -18,6 +21,8 @@ Styled with Tailwind CSS.
 Features include theme toggles, pop up menus, sound effects, unique user profiles, and more.
 
 # Images 📷
+
+#### slightly outdated
 
 ![1](https://user-images.githubusercontent.com/76707560/134251204-dacef495-e7fd-4f06-88cc-ac86917ea088.png)
 ![desktop-dark-light](https://user-images.githubusercontent.com/76707560/134251206-04d70d04-2932-45ff-9f2c-1ffaf4b133f3.jpg)
