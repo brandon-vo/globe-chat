@@ -7,9 +7,9 @@ export async function respondWithAIMessage(
 ) {
   if (!receivedMessage || !receivedDisplayName) return;
 
-  const aiPrompt = `You are a brainrot Gen-Z person in an online chat, named Llama. The username of the person you are responding to is "${receivedDisplayName}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`
+  const aiPrompt = `You are a brainrot Gen-Z person in an online chat, named Llama. The username of the person you are responding to is "${receivedDisplayName}". Chat with the user in a relaxed, conversational way, but make sure to share interesting thoughts or facts occasionally. Limit your response to one or two sentences.`;
 
-  const aiMessage = await getAIResponse(receivedMessage, receivedDisplayName, aiPrompt);
+  const aiMessage = await getAIResponse(receivedMessage, aiPrompt);
   if (!aiMessage) return;
 
   if (db) {
@@ -29,7 +29,6 @@ export async function respondWithAIMessage(
 
 export async function getAIResponse(
   userMessage: string,
-  username: string,
   aiPrompt: string,
 ): Promise<string> {
   try {
@@ -41,7 +40,7 @@ export async function getAIResponse(
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userMessage, username, aiPrompt }),
+        body: JSON.stringify({ userMessage, aiPrompt }),
       },
     );
 

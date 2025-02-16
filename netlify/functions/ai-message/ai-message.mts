@@ -22,14 +22,15 @@ const AIMessage = async (request: Request) => {
       return new Response("Method Not Allowed", { status: 405 });
     }
 
-    const { userMessage, username, aiPrompt } = await request.json();
+    const { userMessage, aiPrompt } = await request.json();
     const missingFields: string[] = [];
     if (!userMessage) missingFields.push("userMessage");
-    if (!username) missingFields.push("username");
     if (!aiPrompt) missingFields.push("aiPrompt");
 
     if (missingFields.length > 0) {
-      return new Response(`Missing fields: ${missingFields.join(", ")}`, { status: 400 });
+      return new Response(`Missing fields: ${missingFields.join(", ")}`, {
+        status: 400,
+      });
     }
 
     const completion = await client.chat.completions.create({
