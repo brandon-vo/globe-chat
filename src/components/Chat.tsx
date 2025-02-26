@@ -93,10 +93,11 @@ const Chat = ({ db }: ChatProps) => {
     }
 
     // Check if message contains over 1000 characters
-    if (formValue.length > 1000)
+    if (formValue.length > 1000) {
       return alert(
         "You cannot send a message that is longer than 1000 characters",
       );
+    }
 
     // Check if message is empty
     if (!formValue.trim().length) {
@@ -120,7 +121,10 @@ const Chat = ({ db }: ChatProps) => {
     messageSound();
     setLastMessageTime(new Date().getTime());
 
-    if (Math.random() < 0.25 && isAIResponse) {
+    if (
+      (formValue.toLowerCase().includes("llama") || Math.random() < 0.35) &&
+      isAIResponse
+    ) {
       await respondWithAIMessage(message, user?.displayName || "Anonymous");
     }
   };
