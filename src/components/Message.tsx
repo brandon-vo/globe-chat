@@ -73,7 +73,7 @@ const Message = ({
             {displayName && (
               <p className="text-primary-500 mr-2">{displayName}</p>
             )}
-            {uid?.toLowerCase().includes("ai") && (
+            {uid?.toLowerCase().includes("ai_model") && (
               <div className="text-xs px-2 py-1/2 rounded-md mr-2 bg-gradient-to-tl from-purple-400 to-red-300 shadow-sm text-white">
                 AI
               </div>

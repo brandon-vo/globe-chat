@@ -149,7 +149,7 @@ const nouns: string[] = [
   "Rainbow",
   "River",
   "Road",
-  "Robot",
+  // "Robot",
   "Rocket",
   "Saddle",
   "Sailboat",
